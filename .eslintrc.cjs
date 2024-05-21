@@ -12,6 +12,7 @@ module.exports = {
 		'plugin:react/jsx-runtime',
 		'prettier',
 	],
+
 	overrides: [
 		{
 			files: ['*.ts', '*.tsx'], // Your TypeScript files extension
