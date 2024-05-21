@@ -23,6 +23,9 @@ export function SiteFooter() {
 					>
 						<Link href="/" className="flex w-fit items-center space-x-2">
 							<Icons.Logo className="size-6" aria-hidden="true" />
+							<span className="text-sm text-muted-foreground">
+								Swiss ANDi Knife
+							</span>
 							<span className="sr-only">Home</span>
 						</Link>
 					</section>
@@ -32,7 +35,9 @@ export function SiteFooter() {
 						aria-labelledby="newsletter-heading"
 						className="space-y-3"
 					>
-						<h4 className="text-base font-medium">Subscribe for updates</h4>
+						<h4 className="font-sm text-base text-muted-foreground">
+							Subscribe for updates
+						</h4>
 						<NewsletterForm />
 					</section>
 				</section>
