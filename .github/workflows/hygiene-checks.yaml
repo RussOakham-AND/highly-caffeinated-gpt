@@ -56,23 +56,23 @@ jobs:
       - name: Run lint
         run: pnpm lint
 
-  # test:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [20.x]
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Install pnpm
-  #       uses: pnpm/action-setup@v3
-  #       with:
-  #         version: 9
-  #     - name: Use Node.JS
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #         cache: "pnpm"
-  #     - name: Install dependencies
-  #       run: pnpm install --frozen-lockfile
-  #     - name: Run test
-  #       run: pnpm test
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - name: Use Node.JS
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run test
+        run: pnpm test
