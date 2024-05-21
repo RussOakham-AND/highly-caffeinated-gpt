@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.2.0](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v0.2.0) (2024-05-21)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240521161148...v0.2.0)
+
+**Merged pull requests:**
+
+- Clerk Auth Added [\#3](https://github.com/RussOakham-AND/highly-caffeinated-gpt/pull/3) ([RussOakham-AND](https://github.com/RussOakham-AND))
+
+## [20240521161148](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/20240521161148) (2024-05-21)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/v0.1.1...20240521161148)
+
 ## [v0.1.1](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v0.1.1) (2024-05-21)
 
 [Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/789b0c07ff11caa6a00814c850434c0c4320b17b...v0.1.1)
