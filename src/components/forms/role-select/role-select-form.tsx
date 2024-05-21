@@ -1,7 +1,9 @@
 'use client'
 
+import { useTransition } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -30,13 +32,19 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>
 
 export function RoleSelectForm({ roles }: RoleSelectFormProps) {
+	const [isPending, startTransition] = useTransition()
+	const router = useRouter()
+
 	const form = useForm<FormValues>({
 		shouldUseNativeValidation: false,
 		resolver: zodResolver(formSchema),
 	})
 
 	const onSubmit: SubmitHandler<FormValues> = (data) => {
-		toast.success(`You selected ${data['user-role']}`)
+		startTransition(() => {
+			toast.success(`You selected ${data['user-role']}`)
+			router.push('/chat')
+		})
 	}
 
 	return (
@@ -72,7 +80,7 @@ export function RoleSelectForm({ roles }: RoleSelectFormProps) {
 					)}
 				/>
 
-				<Button type="submit" variant="default">
+				<Button type="submit" variant="default" disabled={isPending}>
 					Get Started
 				</Button>
 				<RHCDevTool control={form.control} />
