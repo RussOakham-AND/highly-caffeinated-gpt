@@ -16,11 +16,12 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select'
+import { UserRole } from '@/config/user-roles'
 
 import { RHCDevTool } from '../rhc-devtools'
 
 interface RoleSelectFormProps {
-	roles: string[]
+	roles: UserRole[]
 }
 
 const formSchema = z.object({
@@ -63,8 +64,8 @@ export function RoleSelectForm({ roles }: RoleSelectFormProps) {
 								</FormControl>
 								<SelectContent>
 									{roles.map((role) => (
-										<SelectItem key={role} value={role}>
-											{role}
+										<SelectItem key={role.id} value={role.value}>
+											{role.label}
 										</SelectItem>
 									))}
 								</SelectContent>
