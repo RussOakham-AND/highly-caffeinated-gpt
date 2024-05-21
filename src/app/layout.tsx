@@ -13,8 +13,9 @@ import './globals.css'
 const fontSans = FontSans({ subsets: ['latin'], variable: '--font-sans' })
 
 export const metadata: Metadata = {
-	title: 'Highly Caffeinated AND-GPT',
-	description: "We don't know what this is",
+	title: 'Swiss ANDi Knife',
+	description:
+		"A GPT powered Swiss Army Knife for ANDis. It's a tool that can do anything you want it to do (eventually...)",
 }
 
 interface LayoutProps {
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: LayoutProps) {
 					'min-h-screen bg-background font-sans antialiased',
 					fontSans.variable,
 				)}
+				suppressHydrationWarning
 			>
 				<Providers>
 					<div className="relative flex min-h-screen flex-col">
