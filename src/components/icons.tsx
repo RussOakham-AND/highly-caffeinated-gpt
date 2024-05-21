@@ -27,6 +27,24 @@ export const Icons = {
 			/>
 		</svg>
 	),
+	LogoLarge: ({ ...props }: IconProps) => (
+		<svg
+			width="179"
+			height="179"
+			viewBox="0 0 179 179"
+			fill="none"
+			xmlns="http://www.w3.org/2000/svg"
+			{...props}
+		>
+			<rect width="179" height="179" rx="10" fill="#FF323C" />
+			<path
+				fillRule="evenodd"
+				clipRule="evenodd"
+				d="M74 51H105V67.7107L67.7107 105H51V74H74V51ZM74 112.046V128H105V105H128V74H112.046L74 112.046Z"
+				fill="white"
+			/>
+		</svg>
+	),
 	Spinner: (props: IconProps) => (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
