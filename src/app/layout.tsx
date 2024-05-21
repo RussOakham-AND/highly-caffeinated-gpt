@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Inter as FontSans } from 'next/font/google'
 
 import { Shell } from '@/components/layout/shells/shell'
+import { SiteFooter } from '@/components/layout/site-footer/site-footer'
 import { SiteHeader } from '@/components/layout/site-header/site-header'
 import { cn } from '@/lib/utils'
 
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: LayoutProps) {
 							{children}
 						</Shell>
 					</main>
+					<SiteFooter />
 				</div>
 				<Analytics />
 				<SpeedInsights />
