@@ -3,6 +3,7 @@
 import Link from 'next/link'
 
 import { Icons } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import {
 	NavigationMenu,
 	NavigationMenuItem,
@@ -26,6 +27,18 @@ export default function MainNav() {
 								Home
 							</NavigationMenuLink>
 						</Link>
+					</NavigationMenuItem>
+					<NavigationMenuItem>
+						<Link href="/" legacyBehavior passHref>
+							<NavigationMenuLink className={navigationMenuTriggerStyle()}>
+								About
+							</NavigationMenuLink>
+						</Link>
+					</NavigationMenuItem>
+					<NavigationMenuItem>
+						<Button variant="ghost" type="button" disabled>
+							Code Debugger
+						</Button>
 					</NavigationMenuItem>
 				</NavigationMenuList>
 			</NavigationMenu>
