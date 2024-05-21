@@ -6,6 +6,7 @@ import { Inter as FontSans } from 'next/font/google'
 import { Shell } from '@/components/layout/shells/shell'
 import { SiteFooter } from '@/components/layout/site-footer/site-footer'
 import { SiteHeader } from '@/components/layout/site-header/site-header'
+import { Providers } from '@/contexts/providers'
 import { cn } from '@/lib/utils'
 
 import './globals.css'
@@ -30,17 +31,19 @@ export default function RootLayout({ children }: LayoutProps) {
 					fontSans.variable,
 				)}
 			>
-				<div className="relative flex min-h-screen flex-col">
-					<SiteHeader />
-					<main className="flex-1">
-						<Shell variant="zero-vertical-padding" className="max-w-6xl">
-							{children}
-						</Shell>
-					</main>
-					<SiteFooter />
-				</div>
-				<Analytics />
-				<SpeedInsights />
+				<Providers>
+					<div className="relative flex min-h-screen flex-col">
+						<SiteHeader />
+						<main className="flex-1">
+							<Shell variant="zero-vertical-padding" className="max-w-6xl">
+								{children}
+							</Shell>
+						</main>
+						<SiteFooter />
+					</div>
+					<Analytics />
+					<SpeedInsights />
+				</Providers>
 			</body>
 		</html>
 	)
