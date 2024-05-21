@@ -3,6 +3,8 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import { Inter as FontSans } from 'next/font/google'
 
+import { Shell } from '@/components/layout/shells/shell'
+import { SiteHeader } from '@/components/layout/site-header/site-header'
 import { cn } from '@/lib/utils'
 
 import './globals.css'
@@ -20,14 +22,21 @@ interface LayoutProps {
 
 export default function RootLayout({ children }: LayoutProps) {
 	return (
-		<html lang="en">
+		<html lang="en-GB">
 			<body
 				className={cn(
 					'min-h-screen bg-background font-sans antialiased',
 					fontSans.variable,
 				)}
 			>
-				{children}
+				<div className="relative flex min-h-screen flex-col">
+					<SiteHeader />
+					<main className="flex-1">
+						<Shell variant="zero-vertical-padding" className="max-w-6xl">
+							{children}
+						</Shell>
+					</main>
+				</div>
 				<Analytics />
 				<SpeedInsights />
 			</body>
