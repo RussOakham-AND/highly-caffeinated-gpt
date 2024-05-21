@@ -14,7 +14,7 @@ export function Providers({ children }: ProviderProps) {
 			<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
 				{children}
 			</ThemeProvider>
-			<Toaster />
+			<Toaster visibleToasts={1} richColors />
 		</>
 	)
 }
