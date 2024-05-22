@@ -26,7 +26,7 @@ export function UserSelect() {
 			<Card className="w-[350px]">
 				<ClerkLoading>
 					<Shell variant="centered">
-						<Icons.Spinner className="size-36 text-red-500" />
+						<Icons.Spinner className="size-36 animate-spin text-red-500" />
 					</Shell>
 				</ClerkLoading>
 				<SignedIn>
@@ -52,7 +52,7 @@ export function UserSelect() {
 					<CardContent>
 						<div className="flex justify-evenly">
 							<ClerkLoading>
-								<Icons.Spinner className="size-10 text-red-500" />
+								<Icons.Spinner className="size-10 animate-spin text-red-500" />
 							</ClerkLoading>
 							<SignInButton mode="modal">
 								<Button variant="secondary" type="button">
