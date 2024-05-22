@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.2.2](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v0.2.2) (2024-05-22)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240522084428...v0.2.2)
+
+**Merged pull requests:**
+
+- Refactored to use dynamic home page UI [\#5](https://github.com/RussOakham-AND/highly-caffeinated-gpt/pull/5) ([RussOakham-AND](https://github.com/RussOakham-AND))
+
+## [20240522084428](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/20240522084428) (2024-05-22)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/v0.2.1...20240522084428)
+
 ## [v0.2.1](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v0.2.1) (2024-05-22)
 
 [Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240521224344...v0.2.1)
