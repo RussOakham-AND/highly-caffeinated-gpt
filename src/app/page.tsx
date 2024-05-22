@@ -1,4 +1,10 @@
-import { SignedIn, SignedOut, SignInButton, SignUpButton } from '@clerk/nextjs'
+import {
+	ClerkLoading,
+	SignedIn,
+	SignedOut,
+	SignInButton,
+	SignUpButton,
+} from '@clerk/nextjs'
 
 import { RoleSelectForm } from '@/components/forms/role-select/role-select-form'
 import { Icons } from '@/components/icons'
@@ -40,6 +46,9 @@ export default function Home() {
 					</CardHeader>
 					<CardContent>
 						<div className="flex justify-evenly">
+							<ClerkLoading>
+								<Icons.Spinner className="size-10 text-red-500" />
+							</ClerkLoading>
 							<SignInButton mode="modal">
 								<Button variant="secondary" type="button">
 									Login
