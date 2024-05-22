@@ -24,6 +24,11 @@ export function UserSelect() {
 		<Shell variant="centered">
 			<Icons.LogoLarge className="size-28" />
 			<Card className="w-[350px]">
+				<ClerkLoading>
+					<Shell variant="centered">
+						<Icons.Spinner className="size-36 text-red-500" />
+					</Shell>
+				</ClerkLoading>
 				<SignedIn>
 					<CardHeader>
 						<CardTitle>Who are you?</CardTitle>
