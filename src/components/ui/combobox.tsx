@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { CommandList } from 'cmdk'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -17,16 +18,22 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from '@/components/ui/popover'
-import { UserRole, userRoles } from '@/config/user-roles'
+import { userRoles } from '@/config/user-roles'
 import { cn } from '@/lib/utils'
 
-interface ComboboxProps {
-	selectedRole?: UserRole | null
-	setRole: (role: UserRole) => void
-}
-
-export function Combobox({ selectedRole, setRole }: ComboboxProps) {
+export function Combobox() {
+	const [value, setValue] = React.useState('')
 	const [open, setOpen] = React.useState(false)
+	const router = useRouter()
+
+	const roleParam = useSearchParams().get('role')
+	const selectedRole = userRoles.find((role) => role.value === roleParam)
+
+	React.useEffect(() => {
+		if (roleParam) {
+			setValue(userRoles.find((role) => role.value === roleParam)?.label ?? '')
+		}
+	}, [roleParam])
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
@@ -36,7 +43,7 @@ export function Combobox({ selectedRole, setRole }: ComboboxProps) {
 					aria-expanded={open}
 					className="w-[200px] justify-between"
 				>
-					{selectedRole?.label ?? 'Select role...'}
+					{value ?? 'Select role...'}
 					<CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Button>
 			</PopoverTrigger>
@@ -51,7 +58,8 @@ export function Combobox({ selectedRole, setRole }: ComboboxProps) {
 									key={role.value}
 									value={role.value}
 									onSelect={() => {
-										setRole(role)
+										setValue(role.label)
+										router.push(`/?role=${role.value}`)
 										setOpen(false)
 									}}
 								>

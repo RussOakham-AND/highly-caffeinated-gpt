@@ -3,6 +3,7 @@
 import { useTransition } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -16,7 +17,6 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { UserRole } from '@/config/user-roles'
-import { useUserRoleStore } from '@/contexts/user-role-provider'
 
 import { RHCDevTool } from '../rhc-devtools'
 
@@ -33,23 +33,23 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>
 
 export function RoleSelectForm({ roles }: RoleSelectFormProps) {
+	const router = useRouter()
 	const [isPending, startTransition] = useTransition()
-	const { role: initialRole, setRole } = useUserRoleStore((state) => state)
+
+	const initialRole = useSearchParams().get('role')
 
 	const form = useForm<FormValues>({
 		shouldUseNativeValidation: false,
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			'user-role': initialRole?.value ?? '',
+			'user-role': initialRole ?? '',
 		},
 	})
 
 	const onSubmit: SubmitHandler<FormValues> = (data) => {
 		startTransition(() => {
-			setRole(
-				roles.find((role) => role.value === data['user-role']) as UserRole,
-			)
 			toast.success(`You selected ${data['user-role']}`)
+			router.push(`/?role=${data['user-role']}`)
 		})
 	}
 
