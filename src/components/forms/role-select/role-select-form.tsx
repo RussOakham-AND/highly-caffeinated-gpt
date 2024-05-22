@@ -36,11 +36,14 @@ type FormValues = z.infer<typeof formSchema>
 export function RoleSelectForm({ roles }: RoleSelectFormProps) {
 	const [isPending, startTransition] = useTransition()
 	const router = useRouter()
-	const { setRole } = useUserRoleStore((state) => state)
+	const { role: initialRole, setRole } = useUserRoleStore((state) => state)
 
 	const form = useForm<FormValues>({
 		shouldUseNativeValidation: false,
 		resolver: zodResolver(formSchema),
+		defaultValues: {
+			'user-role': initialRole?.value ?? '',
+		},
 	})
 
 	const onSubmit: SubmitHandler<FormValues> = (data) => {
