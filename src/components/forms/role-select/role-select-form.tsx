@@ -1,7 +1,9 @@
 'use client'
 
+import { useTransition } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -14,11 +16,13 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select'
+import { UserRole } from '@/config/user-roles'
+import { useUserRoleStore } from '@/contexts/user-role-provider'
 
 import { RHCDevTool } from '../rhc-devtools'
 
 interface RoleSelectFormProps {
-	roles: string[]
+	roles: UserRole[]
 }
 
 const formSchema = z.object({
@@ -30,13 +34,26 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>
 
 export function RoleSelectForm({ roles }: RoleSelectFormProps) {
+	const [isPending, startTransition] = useTransition()
+	const router = useRouter()
+	const { role: initialRole, setRole } = useUserRoleStore((state) => state)
+
 	const form = useForm<FormValues>({
 		shouldUseNativeValidation: false,
 		resolver: zodResolver(formSchema),
+		defaultValues: {
+			'user-role': initialRole?.value ?? '',
+		},
 	})
 
 	const onSubmit: SubmitHandler<FormValues> = (data) => {
-		toast.success(`You selected ${data['user-role']}`)
+		startTransition(() => {
+			setRole(
+				roles.find((role) => role.value === data['user-role']) as UserRole,
+			)
+			toast.success(`You selected ${data['user-role']}`)
+			router.push('/chat')
+		})
 	}
 
 	return (
@@ -55,8 +72,8 @@ export function RoleSelectForm({ roles }: RoleSelectFormProps) {
 								</FormControl>
 								<SelectContent>
 									{roles.map((role) => (
-										<SelectItem key={role} value={role}>
-											{role}
+										<SelectItem key={role.id} value={role.value}>
+											{role.label}
 										</SelectItem>
 									))}
 								</SelectContent>
@@ -72,7 +89,7 @@ export function RoleSelectForm({ roles }: RoleSelectFormProps) {
 					)}
 				/>
 
-				<Button type="submit" variant="default">
+				<Button type="submit" variant="default" disabled={isPending}>
 					Get Started
 				</Button>
 				<RHCDevTool control={form.control} />
