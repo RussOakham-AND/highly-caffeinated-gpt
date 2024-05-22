@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.3.0](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v0.3.0) (2024-05-22)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240522133330...v0.3.0)
+
+**Merged pull requests:**
+
+- Cursor AI page created [\#7](https://github.com/RussOakham-AND/highly-caffeinated-gpt/pull/7) ([RussOakham-AND](https://github.com/RussOakham-AND))
+
+## [20240522133330](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/20240522133330) (2024-05-22)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/v0.2.3...20240522133330)
+
 ## [v0.2.3](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v0.2.3) (2024-05-22)
 
 [Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240522105311...v0.2.3)
