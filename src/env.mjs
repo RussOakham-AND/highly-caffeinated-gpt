@@ -9,6 +9,7 @@ export const env = createEnv({
 	server: {
 		AZURE_OPEN_AI_URL: z.string().min(1),
 		AZURE_OPEN_AI_KEY: z.string().min(1),
+		BASE_URL: z.string().min(1),
 	},
 	/*
 	 * Environment variables available on the client (and server).
@@ -31,5 +32,7 @@ export const env = createEnv({
 		NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
 			process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
 		CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+		BASE_URL: process.env.BASE_URL,
+		NODE_ENV: process.env.NODE_ENV,
 	},
 })

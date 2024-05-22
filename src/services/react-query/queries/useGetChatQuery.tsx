@@ -1,19 +1,11 @@
 import { useSuspenseQuery } from '@tanstack/react-query'
-import axios from 'axios'
 
-interface Message {
-	id: number
-	role: 'user' | 'agent'
-	content: string
-}
+import { getMessages } from '@/services/server-actions/queries/getMessages'
 
 export const useGetChatQuery = () => {
 	const query = useSuspenseQuery({
 		queryKey: ['chat'],
-		queryFn: async () => {
-			const response = await axios.get<Message[]>('/api/chat')
-			return response.data
-		},
+		queryFn: () => getMessages(),
 	})
 
 	return [query.data]
