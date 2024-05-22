@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { PaperPlaneIcon } from '@radix-ui/react-icons'
+import { notFound } from 'next/navigation'
 
 import { Shell } from '@/components/layout/shells/shell'
 import { Button } from '@/components/ui/button'
@@ -9,32 +10,14 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Combobox } from '@/components/ui/combobox'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
+import { useGetChatQuery } from '@/services/react-query/queries/useGetChatQuery'
 
 export default function Page() {
-	const [messages, setMessages] = useState([
-		{
-			id: 1,
-			role: 'agent',
-			content: 'Hi, how can I help you today?',
-		},
-		{
-			id: 2,
-			role: 'user',
-			content: "Hey, I'm having trouble with my account.",
-		},
-		{
-			id: 3,
-			role: 'agent',
-			content: 'What seems to be the problem?',
-		},
-		{
-			id: 4,
-			role: 'user',
-			content: "I can't log in.",
-		},
-	])
+	const [messages] = useGetChatQuery()
 	const [input, setInput] = useState('')
 	const inputLength = input.trim().length
+
+	if (!messages) return notFound()
 
 	return (
 		<Shell variant="default" className="py-2 md:py-2">
@@ -66,14 +49,14 @@ export default function Page() {
 						onSubmit={(event) => {
 							event.preventDefault()
 							if (inputLength === 0) return
-							setMessages([
-								...messages,
-								{
-									id: messages.length + 1,
-									role: 'user',
-									content: input,
-								},
-							])
+							// setMessages([
+							// 	...messages,
+							// 	{
+							// 		id: messages.length + 1,
+							// 		role: 'user',
+							// 		content: input,
+							// 	},
+							// ])
 							setInput('')
 						}}
 					>

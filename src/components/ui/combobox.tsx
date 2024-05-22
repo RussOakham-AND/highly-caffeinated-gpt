@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { CommandList } from 'cmdk'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -26,14 +26,14 @@ export function Combobox() {
 	const [open, setOpen] = React.useState(false)
 	const router = useRouter()
 
-	const roleParam = new URLSearchParams(window.location.search).get('role')
+	const roleParam = useSearchParams().get('role')
 	const selectedRole = userRoles.find((role) => role.value === roleParam)
 
 	React.useEffect(() => {
-		if (selectedRole) {
-			setValue(selectedRole.label)
+		if (roleParam) {
+			setValue(userRoles.find((role) => role.value === roleParam)?.label ?? '')
 		}
-	}, [selectedRole])
+	}, [roleParam])
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
