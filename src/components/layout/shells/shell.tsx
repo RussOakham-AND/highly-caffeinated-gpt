@@ -7,8 +7,7 @@ const shellVariants = cva('grid items-center gap-8 pb-8 pt-6 md:py-8', {
 		variant: {
 			default: 'container',
 			sidebar: '',
-			'centered-horizontal':
-				'container flex h-[100dvh] max-w-2xl flex-col justify-center',
+			'centered-horizontal': 'container flex max-w-2xl flex-col justify-center',
 			'v-centered': 'container flex items-center h-inherit',
 			centered: 'container flex flex-col justify-center items-center h-inherit',
 			markdown: 'container max-w-3xl py-8 md:py-10 lg:py-10',
