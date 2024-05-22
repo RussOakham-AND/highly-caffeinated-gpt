@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import { useEffect } from 'react'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { CommandList } from 'cmdk'
 
@@ -22,18 +21,12 @@ import { UserRole, userRoles } from '@/config/user-roles'
 import { cn } from '@/lib/utils'
 
 interface ComboboxProps {
-	initialValue?: UserRole
+	selectedRole?: UserRole | null
+	setRole: (role: UserRole) => void
 }
 
-export function Combobox({ initialValue }: ComboboxProps) {
+export function Combobox({ selectedRole, setRole }: ComboboxProps) {
 	const [open, setOpen] = React.useState(false)
-	const [value, setValue] = React.useState<UserRole | null>(null)
-
-	useEffect(() => {
-		if (initialValue) {
-			setValue(initialValue)
-		}
-	}, [initialValue])
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
@@ -43,7 +36,7 @@ export function Combobox({ initialValue }: ComboboxProps) {
 					aria-expanded={open}
 					className="w-[200px] justify-between"
 				>
-					{value?.label ?? 'Select role...'}
+					{selectedRole?.label ?? 'Select role...'}
 					<CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
 				</Button>
 			</PopoverTrigger>
@@ -57,10 +50,8 @@ export function Combobox({ initialValue }: ComboboxProps) {
 								<CommandItem
 									key={role.value}
 									value={role.value}
-									onSelect={(currentValue) => {
-										setValue(
-											userRoles.find((r) => r.value === currentValue) ?? null,
-										)
+									onSelect={() => {
+										setRole(role)
 										setOpen(false)
 									}}
 								>
@@ -68,7 +59,7 @@ export function Combobox({ initialValue }: ComboboxProps) {
 									<CheckIcon
 										className={cn(
 											'ml-auto h-4 w-4',
-											value === role ? 'opacity-100' : 'opacity-0',
+											selectedRole === role ? 'opacity-100' : 'opacity-0',
 										)}
 									/>
 								</CommandItem>

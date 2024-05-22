@@ -17,6 +17,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { UserRole } from '@/config/user-roles'
+import { useUserRoleStore } from '@/contexts/user-role-provider'
 
 import { RHCDevTool } from '../rhc-devtools'
 
@@ -35,6 +36,7 @@ type FormValues = z.infer<typeof formSchema>
 export function RoleSelectForm({ roles }: RoleSelectFormProps) {
 	const [isPending, startTransition] = useTransition()
 	const router = useRouter()
+	const { setRole } = useUserRoleStore((state) => state)
 
 	const form = useForm<FormValues>({
 		shouldUseNativeValidation: false,
@@ -43,6 +45,9 @@ export function RoleSelectForm({ roles }: RoleSelectFormProps) {
 
 	const onSubmit: SubmitHandler<FormValues> = (data) => {
 		startTransition(() => {
+			setRole(
+				roles.find((role) => role.value === data['user-role']) as UserRole,
+			)
 			toast.success(`You selected ${data['user-role']}`)
 			router.push('/chat')
 		})

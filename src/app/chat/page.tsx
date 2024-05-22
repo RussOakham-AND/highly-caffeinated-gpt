@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Combobox } from '@/components/ui/combobox'
 import { Input } from '@/components/ui/input'
+import { useUserRoleStore } from '@/contexts/user-role-provider'
 import { cn } from '@/lib/utils'
 
 export default function Page() {
@@ -35,13 +36,14 @@ export default function Page() {
 	])
 	const [input, setInput] = useState('')
 	const inputLength = input.trim().length
+	const { role, setRole } = useUserRoleStore((state) => state)
 
 	return (
 		<Shell variant="default" className="py-2 md:py-2">
 			<Card className="flex h-full flex-col justify-between">
 				<CardContent className="p-6">
 					<div className="flex justify-end pb-2">
-						<Combobox />
+						<Combobox selectedRole={role} setRole={setRole} />
 					</div>
 
 					<div className="space-y-4">
