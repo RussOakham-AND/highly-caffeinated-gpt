@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.3.1](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v0.3.1) (2024-05-22)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240522192102...v0.3.1)
+
+**Merged pull requests:**
+
+- animation added [\#8](https://github.com/RussOakham-AND/highly-caffeinated-gpt/pull/8) ([RussOakham-AND](https://github.com/RussOakham-AND))
+
+## [20240522192102](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/20240522192102) (2024-05-22)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/v0.3.0...20240522192102)
+
 ## [v0.3.0](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v0.3.0) (2024-05-22)
 
 [Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240522133330...v0.3.0)
