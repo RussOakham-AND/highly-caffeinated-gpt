@@ -3,7 +3,6 @@
 import { useTransition } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -35,7 +34,6 @@ type FormValues = z.infer<typeof formSchema>
 
 export function RoleSelectForm({ roles }: RoleSelectFormProps) {
 	const [isPending, startTransition] = useTransition()
-	const router = useRouter()
 	const { role: initialRole, setRole } = useUserRoleStore((state) => state)
 
 	const form = useForm<FormValues>({
@@ -52,7 +50,6 @@ export function RoleSelectForm({ roles }: RoleSelectFormProps) {
 				roles.find((role) => role.value === data['user-role']) as UserRole,
 			)
 			toast.success(`You selected ${data['user-role']}`)
-			router.push('/chat')
 		})
 	}
 
