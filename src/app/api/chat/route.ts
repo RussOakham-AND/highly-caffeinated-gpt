@@ -1,6 +1,22 @@
+import { auth } from '@clerk/nextjs/server'
+import { StatusCodes } from 'http-status-codes'
 import { NextResponse } from 'next/server'
 
 export function GET() {
+	const { userId } = auth()
+
+	if (!userId) {
+		return NextResponse.json(
+			{
+				error: 'Unauthorized',
+				message: 'You must be logged in to access this resource.',
+			},
+			{
+				status: StatusCodes.UNAUTHORIZED,
+			},
+		)
+	}
+
 	return NextResponse.json([
 		{
 			id: 1,
