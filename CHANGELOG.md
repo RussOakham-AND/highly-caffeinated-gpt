@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.2.3](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v0.2.3) (2024-05-22)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240522105311...v0.2.3)
+
+**Merged pull requests:**
+
+- Feature/network integration [\#6](https://github.com/RussOakham-AND/highly-caffeinated-gpt/pull/6) ([RussOakham-AND](https://github.com/RussOakham-AND))
+
+## [20240522105311](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/20240522105311) (2024-05-22)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/v0.2.2...20240522105311)
+
 ## [v0.2.2](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v0.2.2) (2024-05-22)
 
 [Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240522084428...v0.2.2)
