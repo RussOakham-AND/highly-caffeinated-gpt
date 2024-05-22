@@ -29,13 +29,6 @@ export default function MainNav() {
 						</Link>
 					</NavigationMenuItem>
 					<NavigationMenuItem>
-						<Link href="/chat" legacyBehavior passHref>
-							<NavigationMenuLink className={navigationMenuTriggerStyle()}>
-								Chat
-							</NavigationMenuLink>
-						</Link>
-					</NavigationMenuItem>
-					<NavigationMenuItem>
 						<Link href="/" legacyBehavior passHref>
 							<NavigationMenuLink className={navigationMenuTriggerStyle()}>
 								About
