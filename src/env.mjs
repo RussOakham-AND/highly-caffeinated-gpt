@@ -7,7 +7,8 @@ export const env = createEnv({
 	 * Will throw if you access these variables on the client.
 	 */
 	server: {
-		// Add your serverside environment variables here using zod.
+		AZURE_OPEN_AI_URL: z.string().min(1),
+		AZURE_OPEN_AI_KEY: z.string().min(1),
 	},
 	/*
 	 * Environment variables available on the client (and server).
@@ -25,6 +26,8 @@ export const env = createEnv({
 	 * 💡 You'll get type errors if not all variables from `server` & `client` are included here.
 	 */
 	runtimeEnv: {
+		AZURE_OPEN_AI_URL: process.env.AZURE_OPEN_AI_URL,
+		AZURE_OPEN_AI_KEY: process.env.AZURE_OPEN_AI_KEY,
 		NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
 			process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
 		CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,

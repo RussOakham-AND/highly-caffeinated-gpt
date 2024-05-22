@@ -2,7 +2,9 @@ import { auth } from '@clerk/nextjs/server'
 import { StatusCodes } from 'http-status-codes'
 import { NextResponse } from 'next/server'
 
-export function GET() {
+import { openAiClient } from '@/services/azure-openai/azure-openai-client'
+
+export async function GET() {
 	const { userId } = auth()
 
 	if (!userId) {
@@ -16,6 +18,33 @@ export function GET() {
 			},
 		)
 	}
+
+	const deploymentId = 'gpt-4'
+
+	const messages = [
+		{
+			role: 'system',
+			content: 'You are a helpful assistant. You will talk like a pirate.',
+		},
+		{ role: 'user', content: 'Can you help me?' },
+		{
+			role: 'assistant',
+			content: 'Arrrr! Of course, me hearty! What can I do for ye?',
+		},
+		{ role: 'user', content: "What's the best way to train a parrot?" },
+	]
+
+	const completions = await openAiClient.streamChatCompletions(
+		deploymentId,
+		messages,
+		{
+			temperature: 0.5,
+			maxTokens: 1600,
+		},
+	)
+
+	// NEED AZURE API KEYS!
+	console.log(completions)
 
 	return NextResponse.json([
 		{
