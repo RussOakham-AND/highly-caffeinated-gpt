@@ -2,9 +2,8 @@ import { auth } from '@clerk/nextjs/server'
 import axios from 'axios'
 
 import { OpenAiResponse } from '@/app/schemas/openai.types'
-import { env } from '@/env.mjs'
 
-let baseUrl = env.BASE_URL
+let baseUrl = process.env.VERCEL_URL
 const { NODE_ENV } = process.env
 
 if (NODE_ENV === 'development') {
