@@ -12,6 +12,7 @@ import {
 	navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 
+// TODO: Create Mobile Nav
 export default function MainNav() {
 	return (
 		<div className="hidden gap-6 lg:flex">
@@ -32,6 +33,13 @@ export default function MainNav() {
 						<Link href="/" legacyBehavior passHref>
 							<NavigationMenuLink className={navigationMenuTriggerStyle()}>
 								About
+							</NavigationMenuLink>
+						</Link>
+					</NavigationMenuItem>
+					<NavigationMenuItem>
+						<Link href="/cursor-app" legacyBehavior passHref>
+							<NavigationMenuLink className={navigationMenuTriggerStyle()}>
+								Cursor App
 							</NavigationMenuLink>
 						</Link>
 					</NavigationMenuItem>
