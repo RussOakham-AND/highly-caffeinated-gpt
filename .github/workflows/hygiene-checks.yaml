@@ -37,6 +37,8 @@ jobs:
         env:
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: '${{secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}}'
           CLERK_SECRET_KEY: '${{secrets.CLERK_SECRET_KEY}}'
+          AZURE_OPEN_AI_URL: '${{secrets.AZURE_OPEN_AI_URL}}'
+          AZURE_OPEN_AI_KEY: '${{secrets.AZURE_OPEN_AI_KEY}}'
 
   lint:
     runs-on: ubuntu-latest
