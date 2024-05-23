@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.0.0](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v1.0.0) (2024-05-23)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240523090228...v1.0.0)
+
+**Merged pull requests:**
+
+- Feature/integrate azure openai [\#10](https://github.com/RussOakham-AND/highly-caffeinated-gpt/pull/10) ([RussOakham-AND](https://github.com/RussOakham-AND))
+
+## [20240523090228](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/20240523090228) (2024-05-23)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/v0.3.2...20240523090228)
+
 ## [v0.3.2](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v0.3.2) (2024-05-23)
 
 [Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240522192507...v0.3.2)
