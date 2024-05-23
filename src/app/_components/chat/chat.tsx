@@ -4,10 +4,10 @@ import { useState } from 'react'
 import { PaperPlaneIcon } from '@radix-ui/react-icons'
 import { notFound } from 'next/navigation'
 
+import { ComboboxForm } from '@/components/forms/combobox-form/combobox-form'
 import { Shell } from '@/components/layout/shells/shell'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
-import { Combobox } from '@/components/ui/combobox'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { useGetChatQuery } from '@/services/react-query/queries/useGetChatQuery'
@@ -24,7 +24,7 @@ export default function Page() {
 			<Card className="flex h-full flex-col justify-between">
 				<CardContent className="p-6">
 					<div className="flex justify-end pb-2">
-						<Combobox />
+						<ComboboxForm />
 					</div>
 
 					<div className="space-y-4">
