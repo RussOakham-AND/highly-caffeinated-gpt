@@ -48,7 +48,7 @@ export function ComboboxForm() {
 	})
 
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
-		router.push(`/?role=${data.role}`)
+		router.push(`/chat?role=${data.role}`)
 	}
 
 	return (

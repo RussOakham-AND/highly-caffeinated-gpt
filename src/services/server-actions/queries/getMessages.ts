@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { OpenAiResponse } from '@/app/schemas/openai.types'
+import { OpenAiResponse } from '@/schemas/openai.types'
 
 let baseUrl = process.env.VERCEL_URL
 const { NODE_ENV } = process.env

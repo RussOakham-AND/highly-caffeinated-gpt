@@ -49,7 +49,7 @@ export function RoleSelectForm({ roles }: RoleSelectFormProps) {
 	const onSubmit: SubmitHandler<FormValues> = (data) => {
 		startTransition(() => {
 			toast.success(`You selected ${data['user-role']}`)
-			router.push(`/?role=${data['user-role']}`)
+			router.push(`/chat?role=${data['user-role']}`)
 		})
 	}
 

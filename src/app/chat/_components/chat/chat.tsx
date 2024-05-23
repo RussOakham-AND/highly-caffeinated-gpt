@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { PulseLoader } from 'react-spinners'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PaperPlaneIcon } from '@radix-ui/react-icons'
+import { redirect, useSearchParams } from 'next/navigation'
 import { ChatCompletionMessageParam } from 'openai/resources/chat/completions'
 import { toast } from 'sonner'
 import { v4 as uuid } from 'uuid'
@@ -25,11 +26,16 @@ const chatFormSchema = z.object({
 
 type ChatFormSchema = z.infer<typeof chatFormSchema>
 
-export default function Page() {
+export function Chat() {
 	const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([])
 	const { mutateAsync: postChatMessage, isPending: isPostingMessage } =
 		usePostChatMessage()
-	// const router = useRouter()
+
+	const role = useSearchParams().get('role')
+
+	if (role === null) {
+		redirect('/')
+	}
 
 	const form = useForm<ChatFormSchema>({
 		resolver: zodResolver(chatFormSchema),
