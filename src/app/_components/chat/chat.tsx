@@ -1,78 +1,140 @@
 'use client'
 
 import { useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { PulseLoader } from 'react-spinners'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { PaperPlaneIcon } from '@radix-ui/react-icons'
-import { notFound } from 'next/navigation'
+import { ChatCompletionMessageParam } from 'openai/resources/chat/completions'
+import { toast } from 'sonner'
+import { v4 as uuid } from 'uuid'
+import { z } from 'zod'
 
 import { ComboboxForm } from '@/components/forms/combobox-form/combobox-form'
 import { Shell } from '@/components/layout/shells/shell'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
-import { useGetChatQuery } from '@/services/react-query/queries/useGetChatQuery'
+import { usePostChatMessage } from '@/services/react-query/mutations/usePostChatMessage'
+
+const chatFormSchema = z.object({
+	message: z.string().min(1),
+})
+
+type ChatFormSchema = z.infer<typeof chatFormSchema>
 
 export default function Page() {
-	const [messages] = useGetChatQuery()
-	const [input, setInput] = useState('')
-	const inputLength = input.trim().length
+	const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([])
+	const { mutateAsync: postChatMessage, isPending: isPostingMessage } =
+		usePostChatMessage()
+	// const router = useRouter()
 
-	if (!messages) return notFound()
+	const form = useForm<ChatFormSchema>({
+		resolver: zodResolver(chatFormSchema),
+		shouldUseNativeValidation: false,
+		defaultValues: {
+			message: '',
+		},
+	})
+
+	const onSubmit: SubmitHandler<ChatFormSchema> = async ({ message }) => {
+		if (message.trim().length === 0) return
+		const userMessage: ChatCompletionMessageParam = {
+			role: 'user',
+			content: message,
+		}
+
+		const newMessages: ChatCompletionMessageParam[] = [...messages, userMessage]
+
+		try {
+			setMessages((current) => [...current, userMessage])
+			form.reset()
+
+			const response = await postChatMessage(newMessages)
+
+			const responseMessage: ChatCompletionMessageParam = {
+				role: 'assistant',
+				content: response.data,
+			}
+
+			setMessages((current) => [...current, responseMessage])
+		} catch (err: unknown) {
+			toast.error('Something went wrong')
+		}
+	}
 
 	return (
-		<Shell variant="default" className="py-2 md:py-2">
+		<Shell variant="default" className="max-h-[90vh] py-2 md:py-2">
 			<Card className="flex h-full flex-col justify-between">
 				<CardContent className="p-6">
 					<div className="flex justify-end pb-2">
 						<ComboboxForm />
 					</div>
 
-					<div className="space-y-4">
-						{messages.map((message) => (
+					<div className=" space-y-4 overflow-y-auto">
+						{messages.map((message) => {
+							const id = uuid()
+
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+							const content = message.content as any
+
+							return (
+								<div
+									key={id}
+									className={cn(
+										'flex w-max max-w-3xl flex-col gap-2 rounded-lg px-3 py-2 text-sm',
+										message.role === 'user'
+											? 'ml-auto bg-primary text-primary-foreground'
+											: 'bg-muted',
+									)}
+								>
+									{content}
+								</div>
+							)
+						})}
+						{isPostingMessage && (
 							<div
-								key={message.id}
+								key="temp-id"
 								className={cn(
-									'flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm',
-									message.role === 'user'
-										? 'ml-auto bg-primary text-primary-foreground'
-										: 'bg-muted',
+									'flex w-max max-w-3xl flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm',
 								)}
 							>
-								{message.content}
+								<PulseLoader className="text-muted" size={8} />
 							</div>
-						))}
+						)}
 					</div>
 				</CardContent>
 				<CardFooter>
-					<form
-						className="flex w-full items-center space-x-2"
-						onSubmit={(event) => {
-							event.preventDefault()
-							if (inputLength === 0) return
-							// setMessages([
-							// 	...messages,
-							// 	{
-							// 		id: messages.length + 1,
-							// 		role: 'user',
-							// 		content: input,
-							// 	},
-							// ])
-							setInput('')
-						}}
-					>
-						<Input
-							id="message"
-							placeholder="Type your message..."
-							className="flex-1"
-							autoComplete="off"
-							value={input}
-							onChange={(event) => setInput(event.target.value)}
-						/>
-						<Button type="submit" size="icon" disabled={inputLength === 0}>
-							<PaperPlaneIcon className="h-4 w-4" />
-							<span className="sr-only">Send</span>
-						</Button>
-					</form>
+					<Form {...form}>
+						<form
+							className="flex w-full items-center space-x-2"
+							onSubmit={form.handleSubmit(onSubmit)}
+						>
+							<FormField
+								name="message"
+								control={form.control}
+								render={({ field }) => (
+									<FormItem className="w-full">
+										<FormControl>
+											<Input
+												placeholder="Enter your message"
+												className="flex-1"
+												autoComplete="off"
+												{...field}
+											/>
+										</FormControl>
+									</FormItem>
+								)}
+							/>
+
+							<Button type="submit" size="icon" disabled={isPostingMessage}>
+								<PaperPlaneIcon className="h-4 w-4" />
+								<span className="sr-only">Send</span>
+							</Button>
+						</form>
+					</Form>
 				</CardFooter>
 			</Card>
 		</Shell>
