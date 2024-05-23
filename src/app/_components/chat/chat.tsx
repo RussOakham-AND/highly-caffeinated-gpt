@@ -78,6 +78,9 @@ export default function Page() {
 						{messages.map((message) => {
 							const id = uuid()
 
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+							const content = message.content as any
+
 							return (
 								<div
 									key={id}
@@ -88,7 +91,7 @@ export default function Page() {
 											: 'bg-muted',
 									)}
 								>
-									{message.content}
+									{content}
 								</div>
 							)
 						})}
