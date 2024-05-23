@@ -1,14 +1,8 @@
-'use server'
-
 import { auth } from '@clerk/nextjs/server'
 import axios from 'axios'
 
+import { OpenAiResponse } from '@/app/schemas/openai.types'
 import { env } from '@/env.mjs'
-
-interface Message {
-	role: 'user' | 'agent'
-	content: string
-}
 
 let baseUrl = env.BASE_URL
 const { NODE_ENV } = process.env
@@ -20,7 +14,7 @@ if (NODE_ENV === 'development') {
 export const getMessages = async () => {
 	const token = await auth().getToken()
 
-	const response = await axios.get<Message[]>(`${baseUrl}/api/chat`, {
+	const response = await axios.get<OpenAiResponse>(`${baseUrl}/api/chat`, {
 		headers: {
 			Authorization: `${token}`,
 		},
