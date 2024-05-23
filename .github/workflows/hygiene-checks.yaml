@@ -35,10 +35,14 @@ jobs:
       - name: Run build
         run: pnpm build
         env:
-          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: '${{secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}}'
-          CLERK_SECRET_KEY: '${{secrets.CLERK_SECRET_KEY}}'
           AZURE_OPEN_AI_URL: '${{secrets.AZURE_OPEN_AI_URL}}'
           AZURE_OPEN_AI_KEY: '${{secrets.AZURE_OPEN_AI_KEY}}'
+          KINDE_CLIENT_ID: '${{secrets.KINDE_CLIENT_ID}}'
+          KINDE_CLIENT_SECRET: '${{secrets.KINDE_CLIENT_SECRET}}'
+          KINDE_ISSUER_URL: '${{secrets.KINDE_ISSUER_URL}}'
+          KINDE_SITE_URL: '${{secrets.KINDE_SITE_URL}}'
+          KINDE_POST_LOGOUT_REDIRECT_URL: '${{secrets.KINDE_POST_LOGOUT_REDIRECT_URL}}'
+          KINDE_POST_LOGIN_REDIRECT_URL: '${{secrets.KINDE_POST_LOGIN_REDIRECT_URL}}'
 
   lint:
     runs-on: ubuntu-latest
