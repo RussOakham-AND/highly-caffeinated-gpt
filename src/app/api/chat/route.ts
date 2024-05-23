@@ -1,3 +1,4 @@
+import { ChatRequestMessageUnion } from '@azure/openai'
 import { auth } from '@clerk/nextjs/server'
 import { StatusCodes } from 'http-status-codes'
 import { NextResponse } from 'next/server'
@@ -20,16 +21,14 @@ export async function POST(req: Request) {
 			)
 		}
 
-		const body = await req.json()
-
-		const { messages } = body
+		const body = (await req.json()) as { messages: ChatRequestMessageUnion[] }
 
 		const deploymentId = 'gpt-4'
 
 		const azure = await openAiClient.getChatCompletions(
 			deploymentId,
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-			messages,
+			body.messages,
 			{
 				temperature: 0.5,
 				maxTokens: 1600,
