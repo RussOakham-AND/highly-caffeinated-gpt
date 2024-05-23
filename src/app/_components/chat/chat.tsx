@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { PulseLoader } from 'react-spinners'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PaperPlaneIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
@@ -29,7 +30,7 @@ export default function Page() {
 	const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([])
 	const { mutateAsync: postChatMessage, isPending: isPostingMessage } =
 		usePostChatMessage()
-	const router = useRouter()
+	// const router = useRouter()
 
 	const form = useForm<ChatFormSchema>({
 		resolver: zodResolver(chatFormSchema),
@@ -49,6 +50,9 @@ export default function Page() {
 		const newMessages: ChatCompletionMessageParam[] = [...messages, userMessage]
 
 		try {
+			setMessages((current) => [...current, userMessage])
+			form.reset()
+
 			const response = await postChatMessage(newMessages)
 
 			const responseMessage: ChatCompletionMessageParam = {
@@ -56,13 +60,9 @@ export default function Page() {
 				content: response.data,
 			}
 
-			setMessages((current) => [...current, userMessage, responseMessage])
-
-			form.reset()
+			setMessages((current) => [...current, responseMessage])
 		} catch (err: unknown) {
 			toast.error('Something went wrong')
-		} finally {
-			router.refresh()
 		}
 	}
 
@@ -95,6 +95,16 @@ export default function Page() {
 								</div>
 							)
 						})}
+						{isPostingMessage && (
+							<div
+								key="temp-id"
+								className={cn(
+									'flex w-max max-w-3xl flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm',
+								)}
+							>
+								<PulseLoader className="text-muted" size={8} />
+							</div>
+						)}
 					</div>
 				</CardContent>
 				<CardFooter>
