@@ -1,5 +1,17 @@
 # Changelog
 
+## [v0.3.2](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v0.3.2) (2024-05-23)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240522192507...v0.3.2)
+
+**Merged pull requests:**
+
+- Combobox - refactored to use react-hook-form [\#9](https://github.com/RussOakham-AND/highly-caffeinated-gpt/pull/9) ([RussOakham-AND](https://github.com/RussOakham-AND))
+
+## [20240522192507](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/20240522192507) (2024-05-22)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/v0.3.1...20240522192507)
+
 ## [v0.3.1](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v0.3.1) (2024-05-22)
 
 [Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240522192102...v0.3.1)
