@@ -1,5 +1,5 @@
 import { ChatRequestMessageUnion } from '@azure/openai'
-import { auth } from '@clerk/nextjs/server'
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { StatusCodes } from 'http-status-codes'
 import { NextResponse } from 'next/server'
 
@@ -7,9 +7,11 @@ import { openAiClient } from '@/services/azure-openai/azure-openai-client'
 
 export async function POST(req: Request) {
 	try {
-		const { userId } = auth()
+		const { getUser } = getKindeServerSession()
 
-		if (!userId) {
+		const user = await getUser()
+
+		if (!user?.id) {
 			return NextResponse.json(
 				{
 					error: 'Unauthorized',

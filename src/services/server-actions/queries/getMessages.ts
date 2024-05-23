@@ -1,4 +1,3 @@
-import { auth } from '@clerk/nextjs/server'
 import axios from 'axios'
 
 import { OpenAiResponse } from '@/app/schemas/openai.types'
@@ -11,11 +10,9 @@ if (NODE_ENV === 'development') {
 }
 
 export const getMessages = async () => {
-	const token = await auth().getToken()
-
 	const response = await axios.get<OpenAiResponse>(`${baseUrl}/api/chat`, {
 		headers: {
-			Authorization: `${token}`,
+			Authorization: ``,
 		},
 	})
 
