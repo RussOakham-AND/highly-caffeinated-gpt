@@ -9,6 +9,7 @@ export const env = createEnv({
 	server: {
 		AZURE_OPEN_AI_URL: z.string().min(1),
 		AZURE_OPEN_AI_KEY: z.string().min(1),
+		DATABASE_URL: z.string().min(1),
 	},
 	/*
 	 * Environment variables available on the client (and server).
@@ -32,6 +33,7 @@ export const env = createEnv({
 	runtimeEnv: {
 		AZURE_OPEN_AI_URL: process.env.AZURE_OPEN_AI_URL,
 		AZURE_OPEN_AI_KEY: process.env.AZURE_OPEN_AI_KEY,
+		DATABASE_URL: process.env.DATABASE_URL,
 		NODE_ENV: process.env.NODE_ENV,
 		KINDE_CLIENT_ID: process.env.KINDE_CLIENT_ID,
 		KINDE_CLIENT_SECRET: process.env.KINDE_CLIENT_SECRET,

@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
 import { PuffLoader } from 'react-spinners'
 import { TRPCError } from '@trpc/server'
 import { Route } from 'next'
@@ -23,11 +22,11 @@ export default function Page() {
 	const searchParams = useSearchParams()
 	const origin = searchParams.get('origin')
 
-	const { data } = trpc.authCallback.useQuery(undefined, {
+	trpc.authCallback.useQuery(undefined, {
 		onSuccess: ({ success }) => {
 			if (success) {
 				// user is synced to db
-				router.push((origin as Route) ?? ('/' as Route))
+				router.push(origin ? (`/${origin}` as Route) : ('/' as Route))
 			}
 		},
 		onError: (err) => {
@@ -38,10 +37,6 @@ export default function Page() {
 		retry: true,
 		retryDelay: 500,
 	})
-
-	useEffect(() => {
-		console.log('data', data)
-	}, [data])
 
 	return (
 		<Shell variant="centered">
