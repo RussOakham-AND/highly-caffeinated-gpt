@@ -1,6 +1,9 @@
 'use client'
 
+import { useEffect } from 'react'
 import { PuffLoader } from 'react-spinners'
+import { TRPCError } from '@trpc/server'
+import { Route } from 'next'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import { Icons } from '@/components/icons'
@@ -13,10 +16,32 @@ import {
 	CardTitle,
 } from '@/components/ui/card'
 
+import { trpc } from '../_trpc/client'
+
 export default function Page() {
 	const router = useRouter()
 	const searchParams = useSearchParams()
 	const origin = searchParams.get('origin')
+
+	const { data } = trpc.authCallback.useQuery(undefined, {
+		onSuccess: ({ success }) => {
+			if (success) {
+				// user is synced to db
+				router.push((origin as Route) ?? ('/' as Route))
+			}
+		},
+		onError: (err) => {
+			if (err instanceof TRPCError && err.code === 'UNAUTHORIZED') {
+				router.push('/')
+			}
+		},
+		retry: true,
+		retryDelay: 500,
+	})
+
+	useEffect(() => {
+		console.log('data', data)
+	}, [data])
 
 	return (
 		<Shell variant="centered">

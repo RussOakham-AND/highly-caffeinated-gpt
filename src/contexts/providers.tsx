@@ -4,7 +4,7 @@ import { ThemeProvider } from 'next-themes'
 
 import { Toaster } from '@/components/ui/sonner'
 
-import { ReactQueryProvider } from './react-query-provider'
+import { TRPCProvider } from './trpc-provider'
 import { UserRoleStoreProvider } from './user-role-provider'
 
 interface ProviderProps {
@@ -15,9 +15,9 @@ export function Providers({ children }: ProviderProps) {
 	return (
 		<>
 			<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-				<ReactQueryProvider>
+				<TRPCProvider>
 					<UserRoleStoreProvider>{children}</UserRoleStoreProvider>
-				</ReactQueryProvider>
+				</TRPCProvider>
 			</ThemeProvider>
 			<Toaster visibleToasts={1} richColors closeButton />
 		</>
