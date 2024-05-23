@@ -7,7 +7,7 @@ export default function HeroSection() {
 				<div className="mx-auto max-w-2xl py-6 sm:py-8 lg:py-10">
 					<div className="text-center">
 						<h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-							Cursor is an AI powered form of VSCode
+							Cursor is an AI powered fork of VSCode
 						</h1>
 						<p className="mt-6 text-lg leading-8 text-gray-600">
 							With one-click migration from VSCode, native extension support and
