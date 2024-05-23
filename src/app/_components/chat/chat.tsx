@@ -5,7 +5,6 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { PulseLoader } from 'react-spinners'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PaperPlaneIcon } from '@radix-ui/react-icons'
-import { useRouter } from 'next/navigation'
 import { ChatCompletionMessageParam } from 'openai/resources/chat/completions'
 import { toast } from 'sonner'
 import { v4 as uuid } from 'uuid'
@@ -67,14 +66,14 @@ export default function Page() {
 	}
 
 	return (
-		<Shell variant="default" className="max-h-[680vh] py-2 md:py-2">
+		<Shell variant="default" className="max-h-[90vh] py-2 md:py-2">
 			<Card className="flex h-full flex-col justify-between">
 				<CardContent className="p-6">
 					<div className="flex justify-end pb-2">
 						<ComboboxForm />
 					</div>
 
-					<div className="space-y-4 overflow-y-auto">
+					<div className=" space-y-4 overflow-y-auto">
 						{messages.map((message) => {
 							const id = uuid()
 
