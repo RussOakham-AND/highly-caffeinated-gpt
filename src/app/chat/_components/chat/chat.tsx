@@ -28,7 +28,7 @@ type ChatFormSchema = z.infer<typeof chatFormSchema>
 
 export function Chat() {
 	const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([])
-	const { mutateAsync: postChatMessage, isLoading: isPostingMessage } =
+	const { mutateAsync: postChatMessage, isPending: isPostingMessage } =
 		usePostChatMessage()
 
 	const role = useSearchParams().get('role')

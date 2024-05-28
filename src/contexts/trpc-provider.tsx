@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { httpBatchLink } from '@trpc/react-query'
 
 import { trpc } from '@/app/_trpc/client'
+import { transformer } from '@/lib/transformer'
 import { absoluteUrl } from '@/lib/utils'
 
 export const TRPCProvider = ({ children }: PropsWithChildren) => {
@@ -15,6 +16,7 @@ export const TRPCProvider = ({ children }: PropsWithChildren) => {
 			links: [
 				httpBatchLink({
 					url: absoluteUrl('/api/trpc'),
+					transformer,
 				}),
 			],
 		}),
@@ -24,7 +26,10 @@ export const TRPCProvider = ({ children }: PropsWithChildren) => {
 		<trpc.Provider client={trpcClient} queryClient={queryClient}>
 			<QueryClientProvider client={queryClient}>
 				{children}
-				<ReactQueryDevtools initialIsOpen={false} position="bottom-left" />
+				<ReactQueryDevtools
+					initialIsOpen={false}
+					buttonPosition="bottom-left"
+				/>
 			</QueryClientProvider>
 		</trpc.Provider>
 	)

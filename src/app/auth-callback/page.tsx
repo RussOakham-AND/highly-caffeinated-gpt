@@ -22,21 +22,26 @@ export default function Page() {
 	const searchParams = useSearchParams()
 	const origin = searchParams.get('origin')
 
-	trpc.authCallback.useQuery(undefined, {
-		onSuccess: ({ success }) => {
-			if (success) {
-				// user is synced to db
-				router.push(origin ? (`/${origin}` as Route) : ('/' as Route))
-			}
-		},
-		onError: (err) => {
-			if (err instanceof TRPCError && err.code === 'UNAUTHORIZED') {
-				router.push('/')
-			}
-		},
-		retry: true,
-		retryDelay: 500,
-	})
+	const { data, isFetching, isSuccess, isError, error } =
+		trpc.authCallback.useQuery(undefined, {
+			retry: true,
+			retryDelay: 500,
+		})
+
+	if (isError || !isSuccess) {
+		if (error instanceof TRPCError && error.code === 'UNAUTHORIZED') {
+			router.push('/')
+		}
+	}
+
+	if (!isFetching && isSuccess) {
+		const { success } = data
+
+		if (success) {
+			// user is synced to db
+			router.push(origin ? (`/${origin}` as Route) : ('/' as Route))
+		}
+	}
 
 	return (
 		<Shell variant="centered">
