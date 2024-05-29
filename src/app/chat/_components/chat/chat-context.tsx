@@ -31,11 +31,14 @@ export const ChatContextProvider = ({ children }: ChatContextProviderProps) => {
 
 	const { mutate: sendMessage } = useMutation({
 		mutationFn: async ({
+			chatId,
 			messages: messagesPayload,
 		}: {
+			chatId?: string
 			messages: ChatRequestMessageUnion[]
 		}) => {
 			const response = await axios.post<ChatResponseBody>('/api/chat', {
+				chatId,
 				messagesPayload,
 			})
 
