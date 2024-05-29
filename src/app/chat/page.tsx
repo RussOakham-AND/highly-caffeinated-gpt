@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 
 import { db } from '@/db'
 
-import { Chat } from './_components/chat/chat'
+import { ChatWrapper } from './_components/chat/chat-wrapper'
 
 export default async function Home() {
 	const { getUser } = getKindeServerSession()
@@ -20,5 +20,5 @@ export default async function Home() {
 
 	if (!dbUser) redirect('/auth-callback?origin=chat')
 
-	return <Chat />
+	return <ChatWrapper />
 }

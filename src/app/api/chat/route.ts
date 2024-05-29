@@ -1,17 +1,20 @@
-import { ChatRequestMessageUnion } from '@azure/openai'
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { StatusCodes } from 'http-status-codes'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
+import { env } from '@/env.mjs'
+import { sendMessageValidator } from '@/lib/validators/send-message-validator'
 import { openAiClient } from '@/services/azure-openai/azure-openai-client'
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
 	try {
 		const { getUser } = getKindeServerSession()
 
 		const user = await getUser()
 
-		if (!user?.id) {
+		const userId = user?.id
+
+		if (!userId) {
 			return NextResponse.json(
 				{
 					error: 'Unauthorized',
@@ -23,25 +26,36 @@ export async function POST(req: Request) {
 			)
 		}
 
-		const body = (await req.json()) as { messages: ChatRequestMessageUnion[] }
+		const body = await req.json()
 
-		const deploymentId = 'gpt-4'
+		const requestBody = sendMessageValidator.parse(body)
 
 		const azure = await openAiClient.getChatCompletions(
-			deploymentId,
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-			body.messages,
+			env.AZURE_OPEN_API_DEPLOYMENT_NAME,
+			requestBody.messagesPayload,
 			{
 				temperature: 0.5,
 				maxTokens: 1600,
 			},
 		)
 
-		return NextResponse.json(azure.choices[0].message?.content)
+		const response = {
+			role: azure.choices[0].message?.role,
+			content: azure.choices[0].message?.content,
+		}
+
+		return NextResponse.json(response)
 	} catch (error) {
+		// eslint-disable-next-line no-console
+		console.log(error)
 		return NextResponse.json(
 			{ error: 'Internal Server Error' },
 			{ status: StatusCodes.INTERNAL_SERVER_ERROR },
 		)
 	}
 }
+
+
+// Data Structures
+// Create Unique Chat ID and attach individual messages to ChatId
+// On Post and Response

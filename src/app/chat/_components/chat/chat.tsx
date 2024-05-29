@@ -79,7 +79,7 @@ export function Chat() {
 						<ComboboxForm />
 					</div>
 
-					<div className=" space-y-4 overflow-y-auto">
+					<div className="space-y-4 overflow-y-auto">
 						{messages.map((message) => {
 							const id = uuid()
 

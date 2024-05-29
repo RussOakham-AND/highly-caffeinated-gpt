@@ -11,8 +11,6 @@ export const appRouter = router({
 
 		const user = await getUser()
 
-		console.log('user', user)
-
 		if (!user?.id) {
 			throw new TRPCError({ code: 'UNAUTHORIZED' })
 		}
