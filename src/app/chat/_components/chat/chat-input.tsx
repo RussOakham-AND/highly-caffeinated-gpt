@@ -1,17 +1,16 @@
 'use client'
 
-import { useContext } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PaperPlaneIcon } from '@radix-ui/react-icons'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
+import { trpc } from '@/app/_trpc/client'
 import { RHCDevTool } from '@/components/forms/rhc-devtools'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
-
-import { ChatContext } from './chat-context'
 
 const chatFormSchema = z.object({
 	message: z.string().min(1),
@@ -19,8 +18,21 @@ const chatFormSchema = z.object({
 
 type ChatFormSchema = z.infer<typeof chatFormSchema>
 
-export const ChatInput = () => {
-	const { addMessage, isLoading } = useContext(ChatContext)
+interface ChatInputProps {
+	chatId: string
+}
+
+export const ChatInput = ({ chatId }: ChatInputProps) => {
+	const utils = trpc.useUtils()
+	const { mutate: postMessageMutation, isPending } =
+		trpc.postChatMessage.useMutation({
+			onError: (error) => {
+				toast.error(error.message)
+			},
+			onSettled: async () => {
+				await utils.getChatMessages.invalidate({ chatId })
+			},
+		})
 
 	const form = useForm<ChatFormSchema>({
 		resolver: zodResolver(chatFormSchema),
@@ -40,7 +52,10 @@ export const ChatInput = () => {
 			content: inputMessage,
 		}
 
-		addMessage(userMessage)
+		postMessageMutation({
+			chatId,
+			message: [userMessage],
+		})
 
 		form.reset()
 		form.setFocus('message')
@@ -77,7 +92,7 @@ export const ChatInput = () => {
 					type="submit"
 					size="icon"
 					aria-label="send message"
-					disabled={isLoading}
+					disabled={isPending}
 				>
 					<PaperPlaneIcon className="h-4 w-4" />
 					<span className="sr-only">Send</span>
