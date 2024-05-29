@@ -2,8 +2,9 @@ import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { TRPCError } from '@trpc/server'
 
 import { db } from '@/db'
+import { createChatSchema } from '@/schemas/chat'
 
-import { publicProcedure, router } from './trpc'
+import { privateProcedure, publicProcedure, router } from './trpc'
 
 export const appRouter = router({
 	authCallback: publicProcedure.query(async () => {
@@ -37,6 +38,21 @@ export const appRouter = router({
 
 		return { success: true }
 	}),
+	createChat: privateProcedure
+		.input(createChatSchema)
+		.mutation(async ({ ctx, input }) => {
+			const dbChat = await db.chat.create({
+				data: {
+					User: {
+						connect: {
+							id: ctx.userId,
+						},
+					},
+				},
+			})
+
+			return { chatId: dbChat.id, role: input['user-role'] }
+		}),
 })
 
 export type AppRouter = typeof appRouter

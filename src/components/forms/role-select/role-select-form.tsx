@@ -1,12 +1,11 @@
 'use client'
 
-import { useTransition } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { toast } from 'sonner'
-import { z } from 'zod'
 
+import { trpc } from '@/app/_trpc/client'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import {
@@ -17,6 +16,7 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { UserRole } from '@/config/user-roles'
+import { CreateChatInput, createChatSchema } from '@/schemas/chat'
 
 import { RHCDevTool } from '../rhc-devtools'
 
@@ -24,33 +24,32 @@ interface RoleSelectFormProps {
 	roles: UserRole[]
 }
 
-const formSchema = z.object({
-	'user-role': z.string({
-		required_error: 'Please select a role',
-	}),
-})
-
-type FormValues = z.infer<typeof formSchema>
-
 export function RoleSelectForm({ roles }: RoleSelectFormProps) {
 	const router = useRouter()
-	const [isPending, startTransition] = useTransition()
-
 	const initialRole = useSearchParams().get('role')
 
-	const form = useForm<FormValues>({
+	const { mutate: createChatMutation, isPending } = trpc.createChat.useMutation(
+		{
+			onSuccess: ({ chatId, role }) => {
+				router.push(`/chat/${chatId}?role=${role}`)
+				toast.success(`You selected ${role}`)
+			},
+			onError: (error) => {
+				toast.error(error.message)
+			},
+		},
+	)
+
+	const form = useForm<CreateChatInput>({
 		shouldUseNativeValidation: false,
-		resolver: zodResolver(formSchema),
+		resolver: zodResolver(createChatSchema),
 		defaultValues: {
 			'user-role': initialRole ?? '',
 		},
 	})
 
-	const onSubmit: SubmitHandler<FormValues> = (data) => {
-		startTransition(() => {
-			toast.success(`You selected ${data['user-role']}`)
-			router.push(`/chat?role=${data['user-role']}`)
-		})
+	const onSubmit: SubmitHandler<CreateChatInput> = (data) => {
+		createChatMutation(data)
 	}
 
 	return (
