@@ -72,7 +72,7 @@ export function Chat() {
 	}
 
 	return (
-		<Shell variant="default" className="max-h-[90vh] py-2 md:py-2">
+		<Shell variant="default" className="py-2 md:py-2">
 			<Card className="flex h-full flex-col justify-between">
 				<CardContent className="p-6">
 					<div className="flex justify-end pb-2">

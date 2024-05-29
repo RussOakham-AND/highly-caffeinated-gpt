@@ -11,6 +11,7 @@ import { RHCDevTool } from '@/components/forms/rhc-devtools'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
+import { useReplyPendingStore } from '@/contexts/reply-pending-provider'
 
 const chatFormSchema = z.object({
 	message: z.string().min(1),
@@ -23,14 +24,20 @@ interface ChatInputProps {
 }
 
 export const ChatInput = ({ chatId }: ChatInputProps) => {
+	const { setIsPending } = useReplyPendingStore((state) => state)
 	const utils = trpc.useUtils()
+
 	const { mutate: postMessageMutation, isPending } =
 		trpc.postChatMessage.useMutation({
+			onMutate: () => {
+				setIsPending(true)
+			},
 			onError: (error) => {
 				toast.error(error.message)
 			},
 			onSettled: async () => {
 				await utils.getChatMessages.invalidate({ chatId })
+				setIsPending(false)
 			},
 		})
 

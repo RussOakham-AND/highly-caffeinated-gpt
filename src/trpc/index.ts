@@ -1,3 +1,4 @@
+import { ChatRequestMessageUnion } from '@azure/openai'
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { TRPCError } from '@trpc/server'
 
@@ -137,9 +138,27 @@ export const appRouter = router({
 				},
 			})
 
+			const messages = await db.message.findMany({
+				where: {
+					chatId: dbChat.id,
+				},
+				orderBy: {
+					createdAt: 'asc',
+				},
+			})
+
+			const azureMessages: ChatRequestMessageUnion[] = messages.map(
+				(message) => {
+					return {
+						role: message.role,
+						content: message.text,
+					}
+				},
+			)
+
 			const azure = await openAiClient.getChatCompletions(
 				env.AZURE_OPEN_API_DEPLOYMENT_NAME,
-				input.message,
+				azureMessages,
 				{
 					temperature: 0.5,
 					maxTokens: 1600,
@@ -163,6 +182,8 @@ export const appRouter = router({
 					isUserMessage: false,
 				},
 			})
+
+			return response
 		}),
 })
 
