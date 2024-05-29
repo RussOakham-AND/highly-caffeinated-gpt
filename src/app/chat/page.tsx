@@ -31,6 +31,8 @@ export default async function Home() {
 
 	if (!dbUser) redirect('/auth-callback?origin=chat')
 
+	// TODO: Select historic Chats - side drawer?
+
 	return (
 		<Shell variant="centered">
 			<Icons.LogoLarge className="size-28" />
