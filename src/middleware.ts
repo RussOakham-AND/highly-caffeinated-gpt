@@ -4,5 +4,5 @@ export default function middleware(req: Request) {
 	return withAuth(req)
 }
 export const config = {
-	matcher: ['/chat', '/auth-callback'],
+	matcher: ['/chat', '/auth-callback', '/chat/[chatId]'],
 }
