@@ -61,6 +61,28 @@ export const appRouter = router({
 
 			return { chatId: dbChat.id, role: input['user-role'] }
 		}),
+	getAllChats: privateProcedure.query(async ({ ctx }) => {
+		const dbUser = await db.user.findFirst({
+			where: {
+				id: ctx.userId,
+			},
+		})
+
+		if (!dbUser) {
+			throw new TRPCError({ code: 'NOT_FOUND' })
+		}
+
+		const dbChats = await db.chat.findMany({
+			where: {
+				userId: dbUser.id,
+			},
+			orderBy: {
+				createdAt: 'desc',
+			},
+		})
+
+		return dbChats
+	}),
 	getChatInfo: privateProcedure
 		.input(getChatInfoSchema)
 		.query(async ({ ctx, input }) => {
