@@ -11,8 +11,6 @@ export const env = createEnv({
 		AZURE_OPEN_AI_KEY: z.string().min(1),
 		AZURE_OPEN_API_DEPLOYMENT_NAME: z.string().min(1),
 		DATABASE_URL: z.string().min(1),
-		PINECONE_API_KEY: z.string().min(1),
-		PINECONE_INDEX: z.string().min(1),
 	},
 	/*
 	 * Environment variables available on the client (and server).
@@ -45,7 +43,5 @@ export const env = createEnv({
 		KINDE_SITE_URL: process.env.KINDE_SITE_URL,
 		KINDE_POST_LOGOUT_REDIRECT_URL: process.env.KINDE_POST_LOGOUT_REDIRECT_URL,
 		KINDE_POST_LOGIN_REDIRECT_URL: process.env.KINDE_POST_LOGIN_REDIRECT_URL,
-		PINECONE_API_KEY: process.env.PINECONE_API_KEY,
-		PINECONE_INDEX: process.env.PINECONE_INDEX,
 	},
 })
