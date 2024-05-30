@@ -48,12 +48,12 @@ export const ChatHistoryButton = ({ chat }: ChatHistoryButtonProps) => {
 
 	return (
 		<Link
-			href={`/chat/${chat.id}?role=${messages[0]?.role ?? 'user'}`}
+			href={`/chat/${chat.id}?role=${messages[messages.length - 1]?.role ?? 'user'}`}
 			legacyBehavior
 			passHref
 		>
-			<Button variant="outline" id={chat.id}>
-				{messages[0]?.text ?? 'New Chat'}
+			<Button variant="outline" className="block truncate px-4" id={chat.id}>
+				{messages[messages.length - 1]?.text ?? 'New Chat'}
 			</Button>
 		</Link>
 	)

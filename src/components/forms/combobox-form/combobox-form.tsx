@@ -31,7 +31,11 @@ const inputsSchema = z.object({
 
 type Inputs = z.infer<typeof inputsSchema>
 
-export function ComboboxForm() {
+interface ComboboxFormProps {
+	chatId: string
+}
+
+export function ComboboxForm({ chatId }: ComboboxFormProps) {
 	const [open, setOpen] = useState(false)
 	const formRef = useRef<HTMLFormElement>(null)
 	const router = useRouter()
@@ -48,7 +52,7 @@ export function ComboboxForm() {
 	})
 
 	const onSubmit: SubmitHandler<Inputs> = (data) => {
-		router.push(`/chat?role=${data.role}`)
+		router.push(`/chat/${chatId}?role=${data.role}`)
 	}
 
 	return (

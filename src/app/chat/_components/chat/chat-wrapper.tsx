@@ -1,11 +1,15 @@
 'use client'
 
+import { GoSidebarCollapse } from 'react-icons/go'
 import { PulseLoader } from 'react-spinners'
 
 import { trpc } from '@/app/_trpc/client'
+import { ChatHistorySheet } from '@/components/chat-history-sheet'
 import { ComboboxForm } from '@/components/forms/combobox-form/combobox-form'
 import { Shell } from '@/components/layout/shells/shell'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
+import { Sheet, SheetTrigger } from '@/components/ui/sheet'
 import { useReplyPendingStore } from '@/contexts/reply-pending-provider'
 import { cn } from '@/lib/utils'
 
@@ -26,6 +30,15 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 	} = trpc.getChatMessages.useQuery({ chatId })
 	const { isPending } = useReplyPendingStore((state) => state)
 
+	const {
+		data: chats,
+		isFetching: isFetchingChats,
+		isError: isErrorChats,
+		isSuccess: isSuccessChats,
+	} = trpc.getAllChats.useQuery()
+
+	const disableButton = isFetchingChats || isErrorChats || !isSuccessChats
+
 	if (isFetching && !messages) {
 		return <div>Loading...</div>
 	}
@@ -39,7 +52,20 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 			<Card className="relative flex min-h-full flex-col justify-between gap-2">
 				<CardContent className="p-6">
 					<div className="flex justify-end pb-2">
-						<ComboboxForm />
+						<Sheet>
+							<SheetTrigger asChild>
+								<Button
+									type="button"
+									variant="secondary"
+									className="mr-2"
+									disabled={disableButton}
+								>
+									<GoSidebarCollapse />
+								</Button>
+							</SheetTrigger>
+							{chats ? <ChatHistorySheet chats={chats} /> : null}
+						</Sheet>
+						<ComboboxForm chatId={chatId} />
 					</div>
 					<div className="mb-28 flex flex-1 flex-col justify-between gap-2">
 						{messages.map((message) => (
