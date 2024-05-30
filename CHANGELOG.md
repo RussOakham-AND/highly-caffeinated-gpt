@@ -1,5 +1,17 @@
 # Changelog
 
+## [v2.0.2](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v2.0.2) (2024-05-30)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240530150601...v2.0.2)
+
+**Merged pull requests:**
+
+- TRPC - set max duration limit [\#13](https://github.com/RussOakham-AND/highly-caffeinated-gpt/pull/13) ([RussOakham-AND](https://github.com/RussOakham-AND))
+
+## [20240530150601](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/20240530150601) (2024-05-30)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/v2.0.1...20240530150601)
+
 ## [v2.0.1](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v2.0.1) (2024-05-30)
 
 [Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240530141912...v2.0.1)
