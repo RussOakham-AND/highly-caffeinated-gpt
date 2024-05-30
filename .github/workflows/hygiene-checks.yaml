@@ -37,6 +37,8 @@ jobs:
         env:
           AZURE_OPEN_AI_URL: '${{secrets.AZURE_OPEN_AI_URL}}'
           AZURE_OPEN_AI_KEY: '${{secrets.AZURE_OPEN_AI_KEY}}'
+          AZURE_OPEN_API_DEPLOYMENT_NAME: '${{secrets.AZURE_OPEN_API_DEPLOYMENT_NAME}}'
+          DATABASE_URL: '${{secrets.DATABASE_URL}}'
           KINDE_CLIENT_ID: '${{secrets.KINDE_CLIENT_ID}}'
           KINDE_CLIENT_SECRET: '${{secrets.KINDE_CLIENT_SECRET}}'
           KINDE_ISSUER_URL: '${{secrets.KINDE_ISSUER_URL}}'
