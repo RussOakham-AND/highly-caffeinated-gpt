@@ -1,18 +1,58 @@
-'use client'
+import {
+	getKindeServerSession,
+	LoginLink,
+	RegisterLink,
+} from '@kinde-oss/kinde-auth-nextjs/server'
+import { ArrowRightIcon } from '@radix-ui/react-icons'
+import { redirect } from 'next/navigation'
 
-import { useAuth } from '@clerk/nextjs'
-import { useSearchParams } from 'next/navigation'
+import { Icons } from '@/components/icons'
+import { Shell } from '@/components/layout/shells/shell'
+import { buttonVariants } from '@/components/ui/button'
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card'
 
-import Chat from './_components/chat/chat'
-import { UserSelect } from './_components/user-select/userSelect'
+export default async function Home() {
+	const { isAuthenticated } = getKindeServerSession()
 
-export default function Home() {
-	const role = useSearchParams().get('role')
-	const { isSignedIn } = useAuth()
+	const isAuthorized = await isAuthenticated()
 
-	if (role !== null && isSignedIn) {
-		return <Chat />
+	if (isAuthorized) {
+		redirect('/chat')
 	}
 
-	return <UserSelect />
+	return (
+		<Shell variant="centered">
+			<Icons.LogoLarge className="size-28" />
+			<Card className="w-[350px]">
+				<CardHeader>
+					<CardTitle>Sign in or sign up</CardTitle>
+					<CardDescription>
+						Sign in or sign up to Swiss ANDi Knife to get started. You can
+						choose your role after you sign in.
+					</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<div className="flex justify-evenly">
+						<LoginLink
+							className={buttonVariants({
+								variant: 'ghost',
+							})}
+						>
+							Login
+						</LoginLink>
+						<RegisterLink className={buttonVariants({})}>
+							Get Started
+							<ArrowRightIcon className="ml-2 h-4 w-4" />
+						</RegisterLink>
+					</div>
+				</CardContent>
+			</Card>
+		</Shell>
+	)
 }

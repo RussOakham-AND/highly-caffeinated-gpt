@@ -1,16 +1,8 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { withAuth } from '@kinde-oss/kinde-auth-nextjs/middleware'
 
-const isProtectedRoute = createRouteMatcher([])
-
-export default clerkMiddleware(
-	(auth, req) => {
-		if (isProtectedRoute(req)) auth().protect()
-	},
-	{
-		signInUrl: '/',
-	},
-)
-
+export default function middleware(req: Request) {
+	return withAuth(req)
+}
 export const config = {
-	matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
+	matcher: ['/chat', '/auth-callback', '/chat/:chatId*'],
 }

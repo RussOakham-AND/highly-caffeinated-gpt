@@ -1,9 +1,9 @@
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import { getMessages } from '@/services/server-actions/queries/getMessages'
 
 export const useGetChatQuery = () => {
-	const query = useSuspenseQuery({
+	const query = useQuery({
 		queryKey: ['chat'],
 		queryFn: () => getMessages(),
 	})
