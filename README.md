@@ -1,7 +1,6 @@
+# Getting Started
 
-## Getting Started
-
-### env vars
+## env vars
 
 ```bash
 AZURE_OPEN_AI_URL=
