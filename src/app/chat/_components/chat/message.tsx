@@ -26,7 +26,7 @@ export const Message = ({ message }: MessagesProps) => {
 						: 'bg-muted',
 				)}
 			>
-				{message.text}
+				<pre className="text-wrap">{message.text}</pre>
 			</div>
 			<span
 				className={cn(
