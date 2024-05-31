@@ -2,6 +2,7 @@
 
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Message } from '@prisma/client'
 import { PaperPlaneIcon } from '@radix-ui/react-icons'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -23,16 +24,46 @@ interface ChatInputProps {
 	chatId: string
 }
 
+interface OptimisticMessage extends Omit<Message, 'createdAt' | 'updatedAt'> {
+	createdAt: string
+	updatedAt: string
+}
+
 export const ChatInput = ({ chatId }: ChatInputProps) => {
 	const { setIsPending } = useReplyPendingStore((state) => state)
 	const utils = trpc.useUtils()
 
 	const { mutate: postMessageMutation, isPending } =
 		trpc.postChatMessage.useMutation({
-			onMutate: () => {
+			onMutate: async ({ message }) => {
 				setIsPending(true)
+				await utils.getChatMessages.cancel({ chatId })
+
+				const previousMessages = utils.getChatMessages.getData({ chatId })
+
+				if (!previousMessages) return { previousMessages: [] }
+
+				const optimisticMessages: OptimisticMessage[] = [
+					...previousMessages,
+					{
+						id: message[message.length - 1].role,
+						text: message[message.length - 1].content,
+						createdAt: new Date().toISOString(),
+						updatedAt: new Date().toISOString(),
+						isUserMessage: true,
+						role: 'user',
+						chatId,
+					},
+				]
+
+				utils.getChatMessages.setData({ chatId }, optimisticMessages)
+
+				return { previousMessages }
 			},
-			onError: (error) => {
+			onError: (error, variables, context) => {
+				if (context?.previousMessages) {
+					utils.getChatMessages.setData({ chatId }, context.previousMessages)
+				}
 				toast.error(error.message)
 			},
 			onSettled: async () => {
