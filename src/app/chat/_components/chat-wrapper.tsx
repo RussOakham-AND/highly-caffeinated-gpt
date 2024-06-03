@@ -4,7 +4,6 @@ import { GoSidebarCollapse } from 'react-icons/go'
 import { PulseLoader } from 'react-spinners'
 
 import { trpc } from '@/app/_trpc/client'
-import { serverCaller } from '@/app/_trpc/server-client'
 import { ChatHistorySheet } from '@/components/chat-history-sheet'
 import { ComboboxForm } from '@/components/forms/combobox-form/combobox-form'
 import { Shell } from '@/components/layout/shells/shell'
@@ -14,42 +13,23 @@ import { Sheet, SheetTrigger } from '@/components/ui/sheet'
 import { useReplyPendingStore } from '@/contexts/reply-pending-provider'
 import { cn } from '@/lib/utils'
 
+import Loading from '../loading'
+
 import { ChatInput } from './chat-input'
 import { Message } from './message'
 
 interface ChatWrapperProps {
 	chatId: string
-	initialMessages: Awaited<
-		ReturnType<(typeof serverCaller.messages)['getChatMessages']>
-	>
 }
 
-export const ChatWrapper = ({ chatId, initialMessages }: ChatWrapperProps) => {
-	// Move to Page Level Loading Screen
-	if (!initialMessages) {
-		return <div>Loading...</div>
-	}
-
-	const formattedInitialMessages = initialMessages.map((message) => ({
-		...message,
-		createdAt: message.createdAt.toISOString(),
-		updatedAt: message.updatedAt.toISOString(),
-	}))
-
+export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 	const {
 		data: messages,
 		isFetching,
 		isError,
 		error,
 		isSuccess,
-	} = trpc.messages.getChatMessages.useQuery(
-		{ chatId },
-		{
-			initialData: formattedInitialMessages,
-			refetchOnMount: false,
-			refetchOnReconnect: false,
-		},
-	)
+	} = trpc.messages.getChatMessages.useQuery({ chatId })
 	const { isPending } = useReplyPendingStore((state) => state)
 
 	const {
@@ -62,11 +42,11 @@ export const ChatWrapper = ({ chatId, initialMessages }: ChatWrapperProps) => {
 	const disableButton = isFetchingChats || isErrorChats || !isSuccessChats
 
 	if (isFetching && !messages) {
-		return <div>Loading...</div>
+		return <Loading />
 	}
 
 	if (isError || !isSuccess) {
-		return <div>Error: {error?.message}</div>
+		throw new Error(error?.message)
 	}
 
 	return (

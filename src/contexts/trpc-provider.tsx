@@ -3,6 +3,7 @@
 import { PropsWithChildren, useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental'
 import { httpBatchLink } from '@trpc/react-query'
 
 import { trpc } from '@/app/_trpc/client'
@@ -23,11 +24,13 @@ export const TRPCProvider = ({ children }: PropsWithChildren) => {
 	return (
 		<trpc.Provider client={trpcClient} queryClient={queryClient}>
 			<QueryClientProvider client={queryClient}>
-				{children}
-				<ReactQueryDevtools
-					initialIsOpen={false}
-					buttonPosition="bottom-left"
-				/>
+				<ReactQueryStreamedHydration>
+					{children}
+					<ReactQueryDevtools
+						initialIsOpen={false}
+						buttonPosition="bottom-left"
+					/>
+				</ReactQueryStreamedHydration>
 			</QueryClientProvider>
 		</trpc.Provider>
 	)

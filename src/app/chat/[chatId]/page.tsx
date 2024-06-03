@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 
 import { serverCaller } from '@/app/_trpc/server-client'
 
-import { ChatWrapper } from '../_components/chat/chat-wrapper'
+import { ChatWrapper } from '../_components/chat-wrapper'
 
 export default async function ChatIdPage({
 	params,
@@ -17,9 +17,5 @@ export default async function ChatIdPage({
 		notFound()
 	}
 
-	const chatMessages = await serverCaller.messages.getChatMessages({
-		chatId: chatInfo.id,
-	})
-
-	return <ChatWrapper chatId={chatInfo.id} initialMessages={chatMessages} />
+	return <ChatWrapper chatId={chatInfo.id} />
 }
