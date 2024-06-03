@@ -108,7 +108,7 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 						</Sheet>
 						<ComboboxForm chatId={chatId} />
 					</div>
-					<div className="scrollbar-track-transparent flex max-h-[70vh] flex-1 flex-col justify-between gap-2 overflow-y-auto">
+					<div className="flex max-h-[70vh] flex-1 flex-col justify-between gap-2 overflow-y-auto">
 						{flatMessages
 							.map((message) => {
 								const isLastMessage =
