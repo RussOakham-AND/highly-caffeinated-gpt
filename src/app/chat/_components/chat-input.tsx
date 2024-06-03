@@ -75,6 +75,7 @@ export const ChatInput = ({ chatId }: ChatInputProps) => {
 			},
 			onSettled: async () => {
 				await utils.messages.getChatMessages.invalidate({ chatId })
+				await utils.messages.getInfiniteChatMessages.invalidate({ chatId })
 				setIsPending(false)
 			},
 		})

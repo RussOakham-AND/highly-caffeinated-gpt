@@ -15,6 +15,7 @@
 		"@hookform/devtools": "^4.3.1",
 		"@hookform/resolvers": "^3.4.2",
 		"@kinde-oss/kinde-auth-nextjs": "^2.2.10",
+		"@mantine/hooks": "^7.10.1",
 		"@neondatabase/serverless": "^0.9.3",
 		"@prisma/adapter-neon": "^5.14.0",
 		"@prisma/client": "5.14.0",
@@ -86,6 +87,7 @@
 		"prettier": "^3.3.0",
 		"prettier-plugin-tailwindcss": "^0.6.1",
 		"prisma": "5.14.0",
+		"tailwind-scrollbar": "^3.1.0",
 		"tailwindcss": "^3.4.3",
 		"typescript": "^5"
 	}
