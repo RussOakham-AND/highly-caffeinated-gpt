@@ -34,12 +34,14 @@ export const ChatInput = ({ chatId }: ChatInputProps) => {
 	const utils = trpc.useUtils()
 
 	const { mutate: postMessageMutation, isPending } =
-		trpc.postChatMessage.useMutation({
+		trpc.messages.postChatMessage.useMutation({
 			onMutate: async ({ message }) => {
 				setIsPending(true)
-				await utils.getChatMessages.cancel({ chatId })
+				await utils.messages.getChatMessages.cancel({ chatId })
 
-				const previousMessages = utils.getChatMessages.getData({ chatId })
+				const previousMessages = utils.messages.getChatMessages.getData({
+					chatId,
+				})
 
 				if (!previousMessages) return { previousMessages: [] }
 
@@ -56,18 +58,21 @@ export const ChatInput = ({ chatId }: ChatInputProps) => {
 					},
 				]
 
-				utils.getChatMessages.setData({ chatId }, optimisticMessages)
+				utils.messages.getChatMessages.setData({ chatId }, optimisticMessages)
 
 				return { previousMessages }
 			},
 			onError: (error, variables, context) => {
 				if (context?.previousMessages) {
-					utils.getChatMessages.setData({ chatId }, context.previousMessages)
+					utils.messages.getChatMessages.setData(
+						{ chatId },
+						context.previousMessages,
+					)
 				}
 				toast.error(error.message)
 			},
 			onSettled: async () => {
-				await utils.getChatMessages.invalidate({ chatId })
+				await utils.messages.getChatMessages.invalidate({ chatId })
 				setIsPending(false)
 			},
 		})

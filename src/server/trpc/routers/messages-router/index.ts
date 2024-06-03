@@ -1,104 +1,14 @@
 import { ChatRequestMessageUnion } from '@azure/openai'
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { TRPCError } from '@trpc/server'
 
 import { db } from '@/db'
 import { env } from '@/env.mjs'
-import {
-	createChatSchema,
-	getChatInfoSchema,
-	getChatMessagesSchema,
-	postChatMessageSchema,
-} from '@/schemas/chat'
+import { getChatMessagesSchema, postChatMessageSchema } from '@/schemas/chat'
 import { openAiClient } from '@/services/azure-openai/azure-openai-client'
 
-import { privateProcedure, publicProcedure, router } from './trpc'
+import { privateProcedure, router } from '../../trpc'
 
-export const appRouter = router({
-	authCallback: publicProcedure.query(async () => {
-		const { getUser } = getKindeServerSession()
-
-		const user = await getUser()
-
-		if (!user?.id) {
-			throw new TRPCError({ code: 'UNAUTHORIZED' })
-		}
-
-		// Check if user is in database
-		const dbUser = await db.user.findFirst({
-			where: {
-				id: user.id,
-			},
-		})
-
-		if (!dbUser) {
-			// User is not in database
-			// Create user in database
-			await db.user.create({
-				data: {
-					id: user.id,
-					email: user.email ?? '',
-					firstName: user.given_name,
-					lastName: user.family_name,
-				},
-			})
-		}
-
-		return { success: true }
-	}),
-	createChat: privateProcedure
-		.input(createChatSchema)
-		.mutation(async ({ ctx, input }) => {
-			const dbChat = await db.chat.create({
-				data: {
-					User: {
-						connect: {
-							id: ctx.userId,
-						},
-					},
-				},
-			})
-
-			return { chatId: dbChat.id, role: input['user-role'] }
-		}),
-	getAllChats: privateProcedure.query(async ({ ctx }) => {
-		const dbUser = await db.user.findFirst({
-			where: {
-				id: ctx.userId,
-			},
-		})
-
-		if (!dbUser) {
-			throw new TRPCError({ code: 'NOT_FOUND' })
-		}
-
-		const dbChats = await db.chat.findMany({
-			where: {
-				userId: dbUser.id,
-			},
-			orderBy: {
-				createdAt: 'desc',
-			},
-		})
-
-		return dbChats
-	}),
-	getChatInfo: privateProcedure
-		.input(getChatInfoSchema)
-		.query(async ({ ctx, input }) => {
-			const dbChatHistory = await db.chat.findFirst({
-				where: {
-					id: input.chatId,
-					userId: ctx.userId,
-				},
-			})
-
-			if (!dbChatHistory) {
-				throw new TRPCError({ code: 'NOT_FOUND' })
-			}
-
-			return dbChatHistory
-		}),
+export const messagesRouter = router({
 	getChatMessages: privateProcedure
 		.input(getChatMessagesSchema)
 		.query(async ({ ctx, input }) => {
@@ -208,5 +118,3 @@ export const appRouter = router({
 			return response
 		}),
 })
-
-export type AppRouter = typeof appRouter

@@ -23,7 +23,7 @@ export default function Page() {
 	const origin = searchParams.get('origin')
 
 	const { data, isFetching, isSuccess, isError, error } =
-		trpc.authCallback.useQuery(undefined, {
+		trpc.auth.authCallback.useQuery(undefined, {
 			retry: true,
 			retryDelay: 500,
 		})

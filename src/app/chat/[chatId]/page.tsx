@@ -8,7 +8,7 @@ import { ChatWrapper } from '../_components/chat/chat-wrapper'
 
 export default function ChatIdPage({ params }: { params: { chatId: string } }) {
 	const { data, isFetching, isError, error, isSuccess } =
-		trpc.getChatInfo.useQuery({ chatId: params.chatId })
+		trpc.chat.getChatInfo.useQuery({ chatId: params.chatId })
 
 	if (isFetching && !data) {
 		return <div>Loading...</div>

@@ -35,12 +35,12 @@ export function RoleSelectForm({ roles }: RoleSelectFormProps) {
 		isFetching,
 		isError,
 		isSuccess,
-	} = trpc.getAllChats.useQuery()
+	} = trpc.chat.getAllChats.useQuery()
 
 	const disableButton = isFetching || isError || !isSuccess
 
-	const { mutate: createChatMutation, isPending } = trpc.createChat.useMutation(
-		{
+	const { mutate: createChatMutation, isPending } =
+		trpc.chat.createChat.useMutation({
 			onSuccess: ({ chatId, role }) => {
 				router.push(`/chat/${chatId}?role=${role}`)
 				toast.success(`You selected ${role}`)
@@ -48,8 +48,7 @@ export function RoleSelectForm({ roles }: RoleSelectFormProps) {
 			onError: (error) => {
 				toast.error(error.message)
 			},
-		},
-	)
+		})
 
 	const form = useForm<CreateChatInput>({
 		shouldUseNativeValidation: false,

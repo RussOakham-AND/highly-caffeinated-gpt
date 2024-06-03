@@ -27,7 +27,7 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 		isError,
 		error,
 		isSuccess,
-	} = trpc.getChatMessages.useQuery({ chatId })
+	} = trpc.messages.getChatMessages.useQuery({ chatId })
 	const { isPending } = useReplyPendingStore((state) => state)
 
 	const {
@@ -35,7 +35,7 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 		isFetching: isFetchingChats,
 		isError: isErrorChats,
 		isSuccess: isSuccessChats,
-	} = trpc.getAllChats.useQuery()
+	} = trpc.chat.getAllChats.useQuery()
 
 	const disableButton = isFetchingChats || isErrorChats || !isSuccessChats
 
