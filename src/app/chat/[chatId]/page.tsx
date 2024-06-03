@@ -1,26 +1,25 @@
-'use client'
-
 import { notFound } from 'next/navigation'
 
-import { trpc } from '@/app/_trpc/client'
+import { serverCaller } from '@/app/_trpc/server-client'
 
 import { ChatWrapper } from '../_components/chat/chat-wrapper'
 
-export default function ChatIdPage({ params }: { params: { chatId: string } }) {
-	const { data, isFetching, isError, error, isSuccess } =
-		trpc.chat.getChatInfo.useQuery({ chatId: params.chatId })
+export default async function ChatIdPage({
+	params,
+}: {
+	params: { chatId: string }
+}) {
+	const chatInfo = await serverCaller.chat.getChatInfo({
+		chatId: params.chatId,
+	})
 
-	if (isFetching && !data) {
-		return <div>Loading...</div>
-	}
-
-	if (isError || !isSuccess) {
-		return <div>Error: {error?.message}</div>
-	}
-
-	if (!data) {
+	if (!chatInfo) {
 		notFound()
 	}
 
-	return <ChatWrapper chatId={data.id} />
+	const chatMessages = await serverCaller.messages.getChatMessages({
+		chatId: chatInfo.id,
+	})
+
+	return <ChatWrapper chatId={chatInfo.id} initialMessages={chatMessages} />
 }

@@ -4,6 +4,7 @@ import { GoSidebarCollapse } from 'react-icons/go'
 import { PulseLoader } from 'react-spinners'
 
 import { trpc } from '@/app/_trpc/client'
+import { serverCaller } from '@/app/_trpc/server-client'
 import { ChatHistorySheet } from '@/components/chat-history-sheet'
 import { ComboboxForm } from '@/components/forms/combobox-form/combobox-form'
 import { Shell } from '@/components/layout/shells/shell'
@@ -18,16 +19,37 @@ import { Message } from './message'
 
 interface ChatWrapperProps {
 	chatId: string
+	initialMessages: Awaited<
+		ReturnType<(typeof serverCaller.messages)['getChatMessages']>
+	>
 }
 
-export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
+export const ChatWrapper = ({ chatId, initialMessages }: ChatWrapperProps) => {
+	// Move to Page Level Loading Screen
+	if (!initialMessages) {
+		return <div>Loading...</div>
+	}
+
+	const formattedInitialMessages = initialMessages.map((message) => ({
+		...message,
+		createdAt: message.createdAt.toISOString(),
+		updatedAt: message.updatedAt.toISOString(),
+	}))
+
 	const {
 		data: messages,
 		isFetching,
 		isError,
 		error,
 		isSuccess,
-	} = trpc.messages.getChatMessages.useQuery({ chatId })
+	} = trpc.messages.getChatMessages.useQuery(
+		{ chatId },
+		{
+			initialData: formattedInitialMessages,
+			refetchOnMount: false,
+			refetchOnReconnect: false,
+		},
+	)
 	const { isPending } = useReplyPendingStore((state) => state)
 
 	const {

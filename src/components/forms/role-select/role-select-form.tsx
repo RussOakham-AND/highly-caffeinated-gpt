@@ -45,6 +45,8 @@ export function RoleSelectForm({ initialChats, roles }: RoleSelectFormProps) {
 		isSuccess,
 	} = trpc.chat.getAllChats.useQuery(undefined, {
 		initialData: formattedInitialRoles,
+		refetchOnMount: false,
+		refetchOnReconnect: false,
 	})
 
 	const disableButton = isFetching || isError || !isSuccess
