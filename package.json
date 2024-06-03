@@ -2,6 +2,7 @@
 	"name": "highly-caffeinated-gpt",
 	"version": "2.0.4",
 	"private": true,
+	"type": "module",
 	"scripts": {
 		"dev": "next dev",
 		"build": "prisma generate && next build",

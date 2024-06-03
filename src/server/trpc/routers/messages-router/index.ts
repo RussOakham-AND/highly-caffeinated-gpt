@@ -118,12 +118,13 @@ export const messagesRouter = router({
 				},
 			})
 
+			// TODO: Refactor to take historic messages from client as context, instead of from DB
 			const messages = await db.message.findMany({
 				where: {
 					chatId: dbChat.id,
 				},
 				orderBy: {
-					createdAt: 'desc',
+					createdAt: 'asc',
 				},
 			})
 

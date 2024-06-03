@@ -87,6 +87,8 @@ export const ChatInput = ({ chatId }: ChatInputProps) => {
 
 		const { role, message } = inputMessage
 
+		console.log('inputMessage', inputMessage)
+
 		postMessageMutation({
 			chatId,
 			message: [{ role, content: message }],
