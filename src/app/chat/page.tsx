@@ -14,7 +14,9 @@ import {
 import { userRoles } from '@/config/user-roles'
 import { db } from '@/db'
 
-export default async function Home() {
+import { serverCaller } from '../_trpc/server-client'
+
+export default async function Chat() {
 	const { getUser } = getKindeServerSession()
 
 	const user = await getUser()
@@ -31,7 +33,7 @@ export default async function Home() {
 
 	if (!dbUser) redirect('/auth-callback?origin=chat')
 
-	// TODO: Select historic Chats - side drawer?
+	const chats = await serverCaller.chat.getAllChats()
 
 	return (
 		<Shell variant="centered">
@@ -45,7 +47,7 @@ export default async function Home() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<RoleSelectForm roles={userRoles} />
+					<RoleSelectForm initialChats={chats} roles={userRoles} />
 				</CardContent>
 			</Card>
 		</Shell>

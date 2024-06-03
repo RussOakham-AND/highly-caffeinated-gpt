@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { toast } from 'sonner'
 
 import { trpc } from '@/app/_trpc/client'
+import { serverCaller } from '@/app/_trpc/server-client'
 import { ChatHistorySheet } from '@/components/chat-history-sheet'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
@@ -23,24 +24,35 @@ import { CreateChatInput, createChatSchema } from '@/schemas/chat'
 import { RHCDevTool } from '../rhc-devtools'
 
 interface RoleSelectFormProps {
+	initialChats: Awaited<ReturnType<(typeof serverCaller.chat)['getAllChats']>>
 	roles: UserRole[]
 }
 
-export function RoleSelectForm({ roles }: RoleSelectFormProps) {
+export function RoleSelectForm({ initialChats, roles }: RoleSelectFormProps) {
 	const router = useRouter()
 	const initialRole = useSearchParams().get('role')
+
+	const formattedInitialRoles = initialChats.map((chat) => ({
+		...chat,
+		createdAt: chat.createdAt.toISOString(),
+		updatedAt: chat.updatedAt.toISOString(),
+	}))
 
 	const {
 		data: chats,
 		isFetching,
 		isError,
 		isSuccess,
-	} = trpc.getAllChats.useQuery()
+	} = trpc.chat.getAllChats.useQuery(undefined, {
+		initialData: formattedInitialRoles,
+		refetchOnMount: false,
+		refetchOnReconnect: false,
+	})
 
 	const disableButton = isFetching || isError || !isSuccess
 
-	const { mutate: createChatMutation, isPending } = trpc.createChat.useMutation(
-		{
+	const { mutate: createChatMutation, isPending } =
+		trpc.chat.createChat.useMutation({
 			onSuccess: ({ chatId, role }) => {
 				router.push(`/chat/${chatId}?role=${role}`)
 				toast.success(`You selected ${role}`)
@@ -48,8 +60,7 @@ export function RoleSelectForm({ roles }: RoleSelectFormProps) {
 			onError: (error) => {
 				toast.error(error.message)
 			},
-		},
-	)
+		})
 
 	const form = useForm<CreateChatInput>({
 		shouldUseNativeValidation: false,

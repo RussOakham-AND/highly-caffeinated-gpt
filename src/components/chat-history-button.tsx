@@ -24,7 +24,7 @@ export const ChatHistoryButton = ({ chat }: ChatHistoryButtonProps) => {
 		isFetching,
 		isError,
 		isSuccess,
-	} = trpc.getChatMessages.useQuery({ chatId: chat.id })
+	} = trpc.messages.getChatMessages.useQuery({ chatId: chat.id })
 
 	if (isFetching && !messages) {
 		return (
@@ -46,6 +46,10 @@ export const ChatHistoryButton = ({ chat }: ChatHistoryButtonProps) => {
 		)
 	}
 
+	const lastUserMessage = messages.findLast(
+		(message) => message.role !== 'assistant',
+	)
+
 	return (
 		<Link
 			href={`/chat/${chat.id}?role=${messages[messages.length - 1]?.role ?? 'user'}`}
@@ -53,7 +57,7 @@ export const ChatHistoryButton = ({ chat }: ChatHistoryButtonProps) => {
 			passHref
 		>
 			<Button variant="outline" className="block truncate px-4" id={chat.id}>
-				{messages[messages.length - 1]?.text ?? 'New Chat'}
+				{lastUserMessage?.text ?? 'New Chat'}
 			</Button>
 		</Link>
 	)

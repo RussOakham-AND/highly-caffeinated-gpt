@@ -13,6 +13,8 @@ import { Sheet, SheetTrigger } from '@/components/ui/sheet'
 import { useReplyPendingStore } from '@/contexts/reply-pending-provider'
 import { cn } from '@/lib/utils'
 
+import Loading from '../loading'
+
 import { ChatInput } from './chat-input'
 import { Message } from './message'
 
@@ -27,7 +29,7 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 		isError,
 		error,
 		isSuccess,
-	} = trpc.getChatMessages.useQuery({ chatId })
+	} = trpc.messages.getChatMessages.useQuery({ chatId })
 	const { isPending } = useReplyPendingStore((state) => state)
 
 	const {
@@ -35,16 +37,16 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 		isFetching: isFetchingChats,
 		isError: isErrorChats,
 		isSuccess: isSuccessChats,
-	} = trpc.getAllChats.useQuery()
+	} = trpc.chat.getAllChats.useQuery()
 
 	const disableButton = isFetchingChats || isErrorChats || !isSuccessChats
 
 	if (isFetching && !messages) {
-		return <div>Loading...</div>
+		return <Loading />
 	}
 
 	if (isError || !isSuccess) {
-		return <div>Error: {error?.message}</div>
+		throw new Error(error?.message)
 	}
 
 	return (

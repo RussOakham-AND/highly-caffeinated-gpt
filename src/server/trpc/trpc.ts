@@ -23,6 +23,6 @@ const isAuth = middleware(async (opts) => {
 	})
 })
 
-export const { router } = t
+export const { router, createCallerFactory } = t
 export const publicProcedure = t.procedure
 export const privateProcedure = t.procedure.use(isAuth)
