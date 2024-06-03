@@ -1,7 +1,9 @@
 'use client'
 
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import { GoSidebarCollapse } from 'react-icons/go'
 import { PulseLoader } from 'react-spinners'
+import { useIntersection } from '@mantine/hooks'
 
 import { trpc } from '@/app/_trpc/client'
 import { ChatHistorySheet } from '@/components/chat-history-sheet'
@@ -23,14 +25,24 @@ interface ChatWrapperProps {
 }
 
 export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
-	const {
-		data: messages,
-		isFetching,
-		isError,
-		error,
-		isSuccess,
-	} = trpc.messages.getChatMessages.useQuery({ chatId })
 	const { isPending } = useReplyPendingStore((state) => state)
+	const lastMessageRef = useRef<HTMLDivElement>(null)
+	const scrollDivRef = useRef<HTMLDivElement>(null)
+
+	const {
+		data: infiniteMessages,
+		status,
+		error: infiniteError,
+		fetchNextPage,
+	} = trpc.messages.getInfiniteChatMessages.useInfiniteQuery(
+		{
+			chatId,
+			limit: 10,
+		},
+		{
+			getNextPageParam: (lastPage) => lastPage.nextCursor,
+		},
+	)
 
 	const {
 		data: chats,
@@ -41,18 +53,45 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 
 	const disableButton = isFetchingChats || isErrorChats || !isSuccessChats
 
-	if (isFetching && !messages) {
+	const { ref, entry } = useIntersection({
+		root: lastMessageRef.current,
+		threshold: 0.5,
+	})
+
+	useEffect(() => {
+		if (entry?.isIntersecting) {
+			fetchNextPage().catch(() => {
+				// ignore
+			})
+		}
+	}, [entry, fetchNextPage])
+
+	useEffect(() => {
+		if (status === 'success') {
+			scrollDivRef.current?.scrollIntoView({ behavior: 'instant' })
+		}
+	}, [status])
+
+	useLayoutEffect(() => {
+		if (scrollDivRef.current) {
+			scrollDivRef.current?.scrollIntoView({ behavior: 'smooth' })
+		}
+	}, [isPending])
+
+	if (status === 'pending') {
 		return <Loading />
 	}
 
-	if (isError || !isSuccess) {
-		throw new Error(error?.message)
+	if (status === 'error') {
+		throw new Error(infiniteError.message)
 	}
+
+	const flatMessages = infiniteMessages?.pages.flatMap((page) => page.messages)
 
 	return (
 		<Shell variant="default" className="py-2 md:py-2">
-			<Card className="relative flex min-h-full flex-col justify-between gap-2">
-				<CardContent className="p-6">
+			<Card className="relative flex flex-col justify-between gap-2 ">
+				<CardContent className=" p-6">
 					<div className="flex justify-end pb-2">
 						<Sheet>
 							<SheetTrigger asChild>
@@ -69,10 +108,18 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 						</Sheet>
 						<ComboboxForm chatId={chatId} />
 					</div>
-					<div className="mb-28 flex flex-1 flex-col justify-between gap-2">
-						{messages.map((message) => (
-							<Message key={message.id} message={message} />
-						))}
+					<div className="flex max-h-[70vh] flex-1 flex-col justify-between gap-2 overflow-y-auto">
+						{flatMessages
+							.map((message) => {
+								const isLastMessage =
+									flatMessages[flatMessages.length - 1].id === message.id
+								return (
+									<div key={message.id} ref={isLastMessage ? ref : undefined}>
+										<Message message={message} />
+									</div>
+								)
+							})
+							.reverse()}
 						{isPending ? (
 							<div
 								key="temp-id"
@@ -87,6 +134,7 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 								/>
 							</div>
 						) : null}
+						<div ref={scrollDivRef} />
 					</div>
 				</CardContent>
 				<CardFooter>

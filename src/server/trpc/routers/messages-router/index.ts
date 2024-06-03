@@ -1,5 +1,6 @@
 import { ChatRequestMessageUnion } from '@azure/openai'
 import { TRPCError } from '@trpc/server'
+import { z } from 'zod'
 
 import { db } from '@/db'
 import { env } from '@/env.mjs'
@@ -9,6 +10,53 @@ import { openAiClient } from '@/services/azure-openai/azure-openai-client'
 import { privateProcedure, router } from '../../trpc'
 
 export const messagesRouter = router({
+	getInfiniteChatMessages: privateProcedure
+		.input(
+			z.object({
+				limit: z.number().min(1).max(100).nullish(),
+				cursor: z.string().nullish(),
+				chatId: z.string(),
+			}),
+		)
+		.query(async ({ ctx, input }) => {
+			const { userId } = ctx
+			const { cursor } = input
+			const limit = input.limit ?? 10
+
+			const dbUser = await db.user.findFirst({
+				where: {
+					id: userId,
+				},
+			})
+
+			if (!dbUser) {
+				throw new TRPCError({ code: 'NOT_FOUND' })
+			}
+
+			const messages = await db.message.findMany({
+				take: limit + 1,
+				where: {
+					chatId: input.chatId,
+				},
+				orderBy: {
+					createdAt: 'desc',
+				},
+				cursor: cursor ? { id: cursor } : undefined,
+			})
+
+			// eslint-disable-next-line no-undef-init
+			let nextCursor: typeof cursor | undefined = undefined
+
+			if (messages.length > limit) {
+				const nextItem = messages.pop()
+				nextCursor = nextItem?.id
+			}
+
+			return {
+				messages,
+				nextCursor,
+			}
+		}),
 	getChatMessages: privateProcedure
 		.input(getChatMessagesSchema)
 		.query(async ({ ctx, input }) => {
@@ -70,6 +118,7 @@ export const messagesRouter = router({
 				},
 			})
 
+			// TODO: Refactor to take historic messages from client as context, instead of from DB
 			const messages = await db.message.findMany({
 				where: {
 					chatId: dbChat.id,
