@@ -69,7 +69,7 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 						</Sheet>
 						<ComboboxForm chatId={chatId} />
 					</div>
-					<div className="mb-28 flex flex-1 flex-col justify-between gap-2">
+					<div className="flex flex-1 flex-col justify-between gap-2">
 						{messages.map((message) => (
 							<Message key={message.id} message={message} />
 						))}
