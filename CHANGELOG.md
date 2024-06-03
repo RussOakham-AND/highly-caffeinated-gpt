@@ -1,5 +1,17 @@
 # Changelog
 
+## [v2.0.5](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v2.0.5) (2024-06-03)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240603162518...v2.0.5)
+
+**Merged pull requests:**
+
+- Feature/chat infinite scroll [\#16](https://github.com/RussOakham-AND/highly-caffeinated-gpt/pull/16) ([RussOakham-AND](https://github.com/RussOakham-AND))
+
+## [20240603162518](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/20240603162518) (2024-06-03)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/v2.0.4...20240603162518)
+
 ## [v2.0.4](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v2.0.4) (2024-06-03)
 
 [Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240531142416...v2.0.4)
