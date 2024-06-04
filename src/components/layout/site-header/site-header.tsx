@@ -9,6 +9,7 @@ import { ArrowRightIcon } from '@radix-ui/react-icons'
 import { buttonVariants } from '@/components/ui/button'
 
 import MainNav from '../navigation/main-nav'
+import { MobileNav } from '../navigation/mobile-nav'
 
 export async function SiteHeader() {
 	const { isAuthenticated } = getKindeServerSession()
@@ -19,6 +20,7 @@ export async function SiteHeader() {
 		<header className="sticky top-0 z-50 w-full border-b bg-background">
 			<div className="container flex h-16 max-w-6xl items-center">
 				<MainNav />
+				<MobileNav />
 				<div className="flex flex-1 items-center justify-end space-x-4">
 					{isAuthed ? (
 						<LogoutLink
@@ -34,12 +36,13 @@ export async function SiteHeader() {
 							<LoginLink
 								className={buttonVariants({
 									variant: 'ghost',
+									size: 'responsive',
 								})}
 							>
 								Login
 							</LoginLink>
-							<RegisterLink className={buttonVariants({})}>
-								Get Started
+							<RegisterLink className={buttonVariants({ size: 'responsive' })}>
+								Register
 								<ArrowRightIcon className="ml-2 h-4 w-4" />
 							</RegisterLink>
 						</>

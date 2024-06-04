@@ -47,7 +47,7 @@ export default async function Home() {
 							Login
 						</LoginLink>
 						<RegisterLink className={buttonVariants({})}>
-							Get Started
+							Register
 							<ArrowRightIcon className="ml-2 h-4 w-4" />
 						</RegisterLink>
 					</div>
