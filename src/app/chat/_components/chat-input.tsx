@@ -1,36 +1,23 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { Message } from '@prisma/client'
 import { PaperPlaneIcon } from '@radix-ui/react-icons'
 import { toast } from 'sonner'
-import { z } from 'zod'
 
 import { trpc } from '@/app/_trpc/client'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { useReplyPendingStore } from '@/contexts/reply-pending-provider'
-
-const chatFormSchema = z.object({
-	role: z.string().min(1),
-	message: z.string().min(1),
-})
-
-type ChatFormSchema = z.infer<typeof chatFormSchema>
+import { ChatMessage } from '@/schemas/chat'
 
 interface ChatInputProps {
 	chatId: string
 }
 
-interface OptimisticMessage extends Omit<Message, 'createdAt' | 'updatedAt'> {
-	createdAt: string
-	updatedAt: string
-}
-
 export const ChatInput = ({ chatId }: ChatInputProps) => {
-	const [inputMessage, setInputMessage] = useState<ChatFormSchema>({
+	const [inputMessage, setInputMessage] = useState<ChatMessage>({
 		role: 'user',
-		message: '',
+		content: '',
 	})
 	const { isPending, setIsPending } = useReplyPendingStore((state) => state)
 	const utils = trpc.useUtils()
@@ -39,42 +26,68 @@ export const ChatInput = ({ chatId }: ChatInputProps) => {
 		trpc.messages.postChatMessage.useMutation({
 			onMutate: async ({ message }) => {
 				setIsPending(true)
-				await utils.messages.getChatMessages.cancel({ chatId })
+				await utils.messages.getInfiniteChatMessages.cancel({ chatId })
 
-				const previousMessages = utils.messages.getChatMessages.getData({
-					chatId,
-				})
-
-				if (!previousMessages) return { previousMessages: [] }
-
-				const optimisticMessages: OptimisticMessage[] = [
-					...previousMessages,
-					{
-						id: message[message.length - 1].role,
-						text: message[message.length - 1].content,
-						createdAt: new Date().toISOString(),
-						updatedAt: new Date().toISOString(),
-						isUserMessage: true,
-						role: 'user',
+				const previousMessages =
+					utils.messages.getInfiniteChatMessages.getInfiniteData({
 						chatId,
+						limit: 10,
+					})
+
+				utils.messages.getInfiniteChatMessages.setInfiniteData(
+					{
+						chatId,
+						limit: 10,
 					},
-				]
+					(previousData) => {
+						if (!previousData) {
+							return {
+								pages: [],
+								pageParams: [],
+							}
+						}
 
-				utils.messages.getChatMessages.setData({ chatId }, optimisticMessages)
+						const optimisticUpdate = {
+							pages: [
+								{
+									messages: [
+										...message.map((msg) => ({
+											...msg,
+											createdAt: new Date().toISOString(),
+											chatId,
+											id: 'temp-id',
+											updatedAt: new Date().toISOString(),
+											text: msg.content,
+											isUserMessage: true,
+										})),
+									],
+								},
+								...previousData.pages,
+							],
+							pageParams: previousData.pageParams,
+						}
 
-				return { previousMessages }
+						return optimisticUpdate
+					},
+				)
+
+				return {
+					previousMessages:
+						previousMessages?.pages.flatMap((page) => page.messages) ?? [],
+				}
 			},
-			onError: (error, variables, context) => {
+			onError: (error, _, context) => {
 				if (context?.previousMessages) {
-					utils.messages.getChatMessages.setData(
+					utils.messages.getInfiniteChatMessages.setData(
 						{ chatId },
-						context.previousMessages,
+						{
+							messages: context.previousMessages ?? [],
+						},
 					)
 				}
 				toast.error(error.message)
 			},
 			onSettled: async () => {
-				await utils.messages.getChatMessages.invalidate({ chatId })
 				await utils.messages.getInfiniteChatMessages.invalidate({ chatId })
 				setIsPending(false)
 			},
@@ -83,18 +96,18 @@ export const ChatInput = ({ chatId }: ChatInputProps) => {
 	const textareaRef = useRef<HTMLTextAreaElement>(null)
 
 	const submitMessage = () => {
-		if (inputMessage.message === '') return
+		if (inputMessage.content === '') return
 
-		const { role, message } = inputMessage
+		const { role, content } = inputMessage
 
 		postMessageMutation({
 			chatId,
-			message: [{ role, content: message }],
+			message: [{ role, content }],
 		})
 
 		setInputMessage({
 			role: 'user',
-			message: '',
+			content: '',
 		})
 		textareaRef.current?.focus()
 	}
@@ -109,14 +122,14 @@ export const ChatInput = ({ chatId }: ChatInputProps) => {
 					maxRows={4}
 					autoFocus
 					autoComplete="off"
-					value={inputMessage?.message}
+					value={inputMessage?.content}
 					className="w-full resize-none pr-12 text-base"
 					onChange={(e) => {
-						const message = e.target.value
+						const content = e.target.value
 
 						setInputMessage({
 							role: 'user',
-							message,
+							content,
 						})
 					}}
 					onKeyDown={(e) => {
