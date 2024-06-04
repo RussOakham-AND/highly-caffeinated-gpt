@@ -12,7 +12,6 @@ import {
 	navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 
-// TODO: Create Mobile Nav
 export default function MainNav() {
 	return (
 		<div className="hidden gap-6 lg:flex">

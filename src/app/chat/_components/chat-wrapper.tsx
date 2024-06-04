@@ -11,6 +11,7 @@ import { ComboboxForm } from '@/components/forms/combobox-form/combobox-form'
 import { Shell } from '@/components/layout/shells/shell'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Sheet, SheetTrigger } from '@/components/ui/sheet'
 import { useReplyPendingStore } from '@/contexts/reply-pending-provider'
 import { cn } from '@/lib/utils'
@@ -90,9 +91,9 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 	const flatMessages = infiniteMessages?.pages.flatMap((page) => page.messages)
 
 	return (
-		<Shell variant="default" className="py-2 md:py-2">
-			<Card className="relative flex flex-col justify-between gap-2">
-				<CardContent className="p-6">
+		<Shell variant="default" className="px-2 py-2 md:px-8 md:py-2">
+			<Card className="relative flex max-w-[95vw] flex-col justify-between gap-2">
+				<CardContent className="p-2 md:p-6">
 					<div className="flex justify-end pb-2">
 						<Sheet>
 							<SheetTrigger asChild>
@@ -109,7 +110,7 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 						</Sheet>
 						<ComboboxForm chatId={chatId} />
 					</div>
-					<div className="flex max-h-[70vh] flex-1 flex-col justify-between gap-2 overflow-y-auto">
+					<ScrollArea className="flex max-h-[65vh] flex-1 flex-col justify-between gap-2 pr-3">
 						{flatMessages
 							.map((message) => {
 								const isLastMessage =
@@ -137,7 +138,7 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 							</div>
 						) : null}
 						<div ref={scrollDivRef} />
-					</div>
+					</ScrollArea>
 				</CardContent>
 				<CardFooter>
 					<ChatInput chatId={chatId} />
