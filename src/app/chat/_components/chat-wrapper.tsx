@@ -90,9 +90,9 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 	const flatMessages = infiniteMessages?.pages.flatMap((page) => page.messages)
 
 	return (
-		<Shell variant="default" className="py-2 md:py-2">
-			<Card className="relative flex flex-col justify-between gap-2">
-				<CardContent className="p-6">
+		<Shell variant="default" className="px-2 py-2 md:px-8 md:py-2">
+			<Card className="relative flex max-w-[95vw] flex-col justify-between gap-2">
+				<CardContent className="p-2 md:p-6">
 					<div className="flex justify-end pb-2">
 						<Sheet>
 							<SheetTrigger asChild>

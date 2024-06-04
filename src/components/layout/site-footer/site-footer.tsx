@@ -35,7 +35,7 @@ export function SiteFooter() {
 						aria-labelledby="footer-bottom-heading"
 						className="flex flex-col items-center space-x-4 lg:flex-row"
 					>
-						<div className="flex-1 text-left text-center text-sm leading-loose text-muted-foreground">
+						<div className="flex-1 text-center text-sm leading-loose text-muted-foreground">
 							{`Built By `}
 							<Link
 								href="/"

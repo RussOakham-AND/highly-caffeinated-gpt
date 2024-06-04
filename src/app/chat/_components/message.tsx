@@ -16,7 +16,7 @@ interface MessagesProps {
 
 export const Message = ({ message }: MessagesProps) => {
 	return (
-		<div className="flex flex-col gap-1 px-3 py-2">
+		<div className="flex flex-col gap-1 py-2">
 			<div
 				key={message.id}
 				className={cn(
@@ -26,7 +26,7 @@ export const Message = ({ message }: MessagesProps) => {
 						: 'bg-muted',
 				)}
 			>
-				<pre className="text-wrap">{message.text}</pre>
+				<pre className="max-w-[80vw] text-pretty">{message.text}</pre>
 			</div>
 			<span
 				className={cn(
