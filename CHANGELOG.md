@@ -1,5 +1,17 @@
 # Changelog
 
+## [v2.0.7](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v2.0.7) (2024-06-04)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240604101047...v2.0.7)
+
+**Merged pull requests:**
+
+- Feat/mobile responsive refactor [\#18](https://github.com/RussOakham-AND/highly-caffeinated-gpt/pull/18) ([RussOakham-AND](https://github.com/RussOakham-AND))
+
+## [20240604101047](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/20240604101047) (2024-06-04)
+
+[Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/v2.0.6...20240604101047)
+
 ## [v2.0.6](https://github.com/RussOakham-AND/highly-caffeinated-gpt/tree/v2.0.6) (2024-06-04)
 
 [Full Changelog](https://github.com/RussOakham-AND/highly-caffeinated-gpt/compare/20240603222629...v2.0.6)
