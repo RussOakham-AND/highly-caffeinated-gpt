@@ -28,6 +28,7 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 	const { isPending } = useReplyPendingStore((state) => state)
 	const lastMessageRef = useRef<HTMLDivElement>(null)
 	const scrollDivRef = useRef<HTMLDivElement>(null)
+	const loadingRef = useRef<HTMLDivElement>(null)
 
 	const {
 		data: infiniteMessages,
@@ -73,7 +74,7 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 	}, [status])
 
 	useLayoutEffect(() => {
-		if (scrollDivRef.current) {
+		if (scrollDivRef.current && loadingRef.current) {
 			scrollDivRef.current?.scrollIntoView({ behavior: 'smooth' })
 		}
 	}, [isPending])
@@ -90,8 +91,8 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 
 	return (
 		<Shell variant="default" className="py-2 md:py-2">
-			<Card className="relative flex flex-col justify-between gap-2 ">
-				<CardContent className=" p-6">
+			<Card className="relative flex flex-col justify-between gap-2">
+				<CardContent className="p-6">
 					<div className="flex justify-end pb-2">
 						<Sheet>
 							<SheetTrigger asChild>
@@ -122,7 +123,8 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 							.reverse()}
 						{isPending ? (
 							<div
-								key="temp-id"
+								key="pending-id"
+								ref={loadingRef}
 								className={cn(
 									'mx-3 my-2 flex w-max min-w-96 max-w-3xl flex-col gap-2 rounded-lg bg-muted px-3 py-2 text-sm',
 								)}

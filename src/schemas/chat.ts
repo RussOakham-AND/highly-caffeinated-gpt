@@ -1,4 +1,10 @@
+import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
 import { z } from 'zod'
+
+import type { AppRouter } from '@/server/trpc/routers'
+
+type RouterInput = inferRouterInputs<AppRouter>
+type RouterOutput = inferRouterOutputs<AppRouter>
 
 export const createChatSchema = z.object({
 	'user-role': z.string({
@@ -32,4 +38,12 @@ export const postChatMessageSchema = z.object({
 	message: z.array(chatMessageSchema),
 })
 
+export type PostChatMessageInput2 = RouterInput['messages']['postChatMessage']
+
 export type PostChatMessageInput = z.infer<typeof postChatMessageSchema>
+
+export type MessagesInfiniteQuery =
+	RouterOutput['messages']['getInfiniteChatMessages']
+
+export type Message =
+	RouterOutput['messages']['getInfiniteChatMessages']['messages'][0]

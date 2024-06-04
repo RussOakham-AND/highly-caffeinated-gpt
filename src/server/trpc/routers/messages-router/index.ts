@@ -118,24 +118,26 @@ export const messagesRouter = router({
 				},
 			})
 
-			// TODO: Refactor to take historic messages from client as context, instead of from DB
+			// Fetch previous 30 messages from db to use as context
 			const messages = await db.message.findMany({
+				take: 30,
 				where: {
 					chatId: dbChat.id,
 				},
 				orderBy: {
-					createdAt: 'asc',
+					createdAt: 'desc',
 				},
 			})
 
-			const azureMessages: ChatRequestMessageUnion[] = messages.map(
-				(message) => {
+			const chronologicalOrderMessages = messages.toReversed()
+
+			const azureMessages: ChatRequestMessageUnion[] =
+				chronologicalOrderMessages.map((message) => {
 					return {
 						role: message.role,
 						content: message.text,
 					}
-				},
-			)
+				})
 
 			const azure = await openAiClient.getChatCompletions(
 				env.AZURE_OPEN_API_DEPLOYMENT_NAME,
