@@ -11,6 +11,12 @@ export const env = createEnv({
 		AZURE_OPEN_AI_KEY: z.string().min(1),
 		AZURE_OPEN_API_DEPLOYMENT_NAME: z.string().min(1),
 		DATABASE_URL: z.string().min(1),
+		KINDE_CLIENT_ID: z.string().min(1),
+		KINDE_CLIENT_SECRET: z.string().min(1),
+		KINDE_ISSUER_URL: z.string().min(1).url(),
+		KINDE_SITE_URL: z.string().min(1).url(),
+		KINDE_POST_LOGOUT_REDIRECT_URL: z.string().min(1).url(),
+		KINDE_POST_LOGIN_REDIRECT_URL: z.string().min(1).url(),
 	},
 	/*
 	 * Environment variables available on the client (and server).
@@ -18,12 +24,8 @@ export const env = createEnv({
 	 * 💡 You'll get type errors if these are not prefixed with NEXT_PUBLIC_.
 	 */
 	client: {
-		KINDE_CLIENT_ID: z.string().min(1),
-		KINDE_CLIENT_SECRET: z.string().min(1),
-		KINDE_ISSUER_URL: z.string().min(1).url(),
-		KINDE_SITE_URL: z.string().min(1).url(),
-		KINDE_POST_LOGOUT_REDIRECT_URL: z.string().min(1).url(),
-		KINDE_POST_LOGIN_REDIRECT_URL: z.string().min(1).url(),
+		NEXT_PUBLIC_POSTHOG_KEY: z.string().min(1),
+		NEXT_PUBLIC_POSTHOG_HOST: z.string().min(1),
 	},
 	/*
 	 * Due to how Next.js bundles environment variables on Edge and Client,
@@ -43,5 +45,7 @@ export const env = createEnv({
 		KINDE_SITE_URL: process.env.KINDE_SITE_URL,
 		KINDE_POST_LOGOUT_REDIRECT_URL: process.env.KINDE_POST_LOGOUT_REDIRECT_URL,
 		KINDE_POST_LOGIN_REDIRECT_URL: process.env.KINDE_POST_LOGIN_REDIRECT_URL,
+		NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
+		NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
 	},
 })

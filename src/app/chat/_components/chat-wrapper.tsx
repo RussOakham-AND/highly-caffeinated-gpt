@@ -110,7 +110,7 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 						</Sheet>
 						<ComboboxForm chatId={chatId} />
 					</div>
-					<ScrollArea className="flex max-h-[65vh] flex-1 flex-col justify-between gap-2 pr-3">
+					<ScrollArea className="flex h-[65vh] flex-1 flex-col justify-between gap-2 pr-3">
 						{flatMessages
 							.map((message) => {
 								const isLastMessage =
