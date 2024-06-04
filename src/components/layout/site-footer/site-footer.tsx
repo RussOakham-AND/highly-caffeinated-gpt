@@ -33,9 +33,9 @@ export function SiteFooter() {
 					<section
 						id="footer-bottom"
 						aria-labelledby="footer-bottom-heading"
-						className="flex items-center space-x-4"
+						className="flex flex-col items-center space-x-4 lg:flex-row"
 					>
-						<div className="flex-1 text-left text-sm leading-loose text-muted-foreground">
+						<div className="flex-1 text-left text-center text-sm leading-loose text-muted-foreground">
 							{`Built By `}
 							<Link
 								href="/"
@@ -70,7 +70,7 @@ export function SiteFooter() {
 						aria-labelledby="newsletter-heading"
 						className="space-y-3"
 					>
-						<h4 className="font-sm text-base text-muted-foreground">
+						<h4 className="font-sm text-center text-base text-muted-foreground lg:text-start">
 							Subscribe for updates
 						</h4>
 						<NewsletterForm />
