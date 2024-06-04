@@ -45,6 +45,8 @@ jobs:
           KINDE_SITE_URL: '${{secrets.KINDE_SITE_URL}}'
           KINDE_POST_LOGOUT_REDIRECT_URL: '${{secrets.KINDE_POST_LOGOUT_REDIRECT_URL}}'
           KINDE_POST_LOGIN_REDIRECT_URL: '${{secrets.KINDE_POST_LOGIN_REDIRECT_URL}}'
+          NEXT_PUBLIC_POSTHOG_KEY: '${{secrets.NEXT_PUBLIC_POSTHOG_KEY}}'
+          NEXT_PUBLIC_POSTHOG_HOST: '${{secrets.NEXT_PUBLIC_POSTHOG_HOST}}'
 
   lint:
     runs-on: ubuntu-latest
