@@ -11,6 +11,7 @@ import { ComboboxForm } from '@/components/forms/combobox-form/combobox-form'
 import { Shell } from '@/components/layout/shells/shell'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Sheet, SheetTrigger } from '@/components/ui/sheet'
 import { useReplyPendingStore } from '@/contexts/reply-pending-provider'
 import { cn } from '@/lib/utils'
@@ -109,7 +110,7 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 						</Sheet>
 						<ComboboxForm chatId={chatId} />
 					</div>
-					<div className="flex max-h-[70vh] flex-1 flex-col justify-between gap-2 overflow-y-auto">
+					<ScrollArea className="flex max-h-[65vh] flex-1 flex-col justify-between gap-2 pr-3">
 						{flatMessages
 							.map((message) => {
 								const isLastMessage =
@@ -137,7 +138,7 @@ export const ChatWrapper = ({ chatId }: ChatWrapperProps) => {
 							</div>
 						) : null}
 						<div ref={scrollDivRef} />
-					</div>
+					</ScrollArea>
 				</CardContent>
 				<CardFooter>
 					<ChatInput chatId={chatId} />
