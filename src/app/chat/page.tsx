@@ -1,4 +1,5 @@
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
+import { eq } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
 
 import { RoleSelectForm } from '@/components/forms/role-select/role-select-form'
@@ -13,6 +14,8 @@ import {
 } from '@/components/ui/card'
 import { userRoles } from '@/config/user-roles'
 import { db } from '@/db'
+import { db as drizzDB } from '@/services/drizzle/db'
+import { User } from '@/services/drizzle/schema'
 
 import { serverCaller } from '../_trpc/server-client'
 
@@ -30,6 +33,17 @@ export default async function Chat() {
 			id: userId,
 		},
 	})
+
+	// Refactor DB queries into separate file to be reusable.
+	const drizzDbUser = await drizzDB
+		.select({
+			user: User,
+		})
+		.from(User)
+		.where(eq(User.id, userId))
+
+	console.log('dbUser', dbUser)
+	console.log('drizzDbUser', drizzDbUser)
 
 	if (!dbUser) redirect('/auth-callback?origin=chat')
 
