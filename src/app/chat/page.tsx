@@ -13,8 +13,7 @@ import {
 	CardTitle,
 } from '@/components/ui/card'
 import { userRoles } from '@/config/user-roles'
-import { db } from '@/db'
-import { db as drizzDB } from '@/services/drizzle/db'
+import { db } from '@/services/drizzle/db'
 import { User } from '@/services/drizzle/schema'
 
 import { serverCaller } from '../_trpc/server-client'
@@ -28,22 +27,9 @@ export default async function Chat() {
 
 	if (!userId) redirect('/auth-callback?origin=chat')
 
-	const dbUser = await db.user.findFirst({
-		where: {
-			id: userId,
-		},
+	const dbUser = await db.query.User.findFirst({
+		where: eq(User.id, userId),
 	})
-
-	// Refactor DB queries into separate file to be reusable.
-	const drizzDbUser = await drizzDB
-		.select({
-			user: User,
-		})
-		.from(User)
-		.where(eq(User.id, userId))
-
-	console.log('dbUser', dbUser)
-	console.log('drizzDbUser', drizzDbUser)
 
 	if (!dbUser) redirect('/auth-callback?origin=chat')
 

@@ -1,7 +1,10 @@
 import { TRPCError } from '@trpc/server'
+import { and, eq } from 'drizzle-orm'
 
 import { db } from '@/db'
 import { createChatSchema, getChatInfoSchema } from '@/schemas/chat'
+import { db as drizzDb } from '@/services/drizzle/db'
+import { Chat } from '@/services/drizzle/schema'
 
 import { privateProcedure, router } from '../../trpc'
 
@@ -24,11 +27,8 @@ export const chatRouter = router({
 	getChatInfo: privateProcedure
 		.input(getChatInfoSchema)
 		.query(async ({ ctx, input }) => {
-			const dbChatHistory = await db.chat.findFirst({
-				where: {
-					id: input.chatId,
-					userId: ctx.userId,
-				},
+			const dbChatHistory = await drizzDb.query.Chat.findFirst({
+				where: and(eq(Chat.id, input.chatId), eq(Chat.userId, ctx.userId)),
 			})
 
 			if (!dbChatHistory) {
